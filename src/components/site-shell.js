@@ -44,21 +44,24 @@ const workCards = [
   {
     tag: "Positioning Reset",
     name: "Luma Skincare",
-    blurb: "Strategy, creative direction, funnel cleanup, and sharper language across the buyer journey.",
+    blurb:
+      "Strategy, creative direction, funnel cleanup, and sharper language across the buyer journey.",
     accent: "pink",
     metric: "Recall up. Wastage down.",
   },
   {
     tag: "Launch System",
     name: "Northline Kitchens",
-    blurb: "From zero clarity to a full launch story with content systems, paid media, and product-led landing pages.",
+    blurb:
+      "From zero clarity to a full launch story with content systems, paid media, and product-led landing pages.",
     accent: "yellow",
     metric: "A clearer brand hit harder.",
   },
   {
     tag: "Scale Engine",
     name: "Vera Clinics",
-    blurb: "Offer refinement, conversion-focused campaigns, and operational systems that turned traction into pace.",
+    blurb:
+      "Offer refinement, conversion-focused campaigns, and operational systems that turned traction into pace.",
     accent: "green",
     metric: "Growth stopped feeling random.",
   },
@@ -212,17 +215,20 @@ const proofItems = [
 
 const testimonialItems = [
   {
-    quote: "Finally made sense of our brand. Everything felt clearer after that.",
+    quote:
+      "Finally made sense of our brand. Everything felt clearer after that.",
     name: "Founder, Luma Skincare",
     title: "Positioning and messaging reset",
   },
   {
-    quote: "Ads actually started working because the offer and the landing flow finally matched.",
+    quote:
+      "Ads actually started working because the offer and the landing flow finally matched.",
     name: "Northline Kitchens",
     title: "Creative and acquisition systems",
   },
   {
-    quote: "We stopped wasting money and started seeing where growth was actually coming from.",
+    quote:
+      "We stopped wasting money and started seeing where growth was actually coming from.",
     name: "Vera Clinics",
     title: "Funnel structure and scale direction",
   },
@@ -278,7 +284,7 @@ function SectionReveal({
           observer.disconnect();
         }
       },
-      { threshold }
+      { threshold },
     );
 
     observer.observe(node);
@@ -294,69 +300,6 @@ function SectionReveal({
     >
       {children}
     </Tag>
-  );
-}
-
-function CherryCursor() {
-  const cursorRef = useRef(null);
-
-  useEffect(() => {
-    if (!window.matchMedia("(pointer:fine)").matches) {
-      return undefined;
-    }
-
-    const node = cursorRef.current;
-
-    if (!node) {
-      return undefined;
-    }
-
-    let frame = 0;
-    let x = 0;
-    let y = 0;
-
-    const render = () => {
-      node.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      frame = 0;
-    };
-
-    const handleMove = (event) => {
-      x = event.clientX;
-      y = event.clientY;
-      node.dataset.visible = "true";
-
-      if (!frame) {
-        frame = window.requestAnimationFrame(render);
-      }
-    };
-
-    const handlePointerContext = (event) => {
-      node.dataset.active = event.target.closest(
-        "a, button, input, textarea, label"
-      )
-        ? "true"
-        : "false";
-    };
-
-    window.addEventListener("mousemove", handleMove);
-    document.addEventListener("mouseover", handlePointerContext);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMove);
-      document.removeEventListener("mouseover", handlePointerContext);
-
-      if (frame) {
-        window.cancelAnimationFrame(frame);
-      }
-    };
-  }, []);
-
-  return (
-    <div ref={cursorRef} className="cherry-cursor" aria-hidden="true">
-      <span className="cherry-cursor__fruit cherry-cursor__fruit--left" />
-      <span className="cherry-cursor__fruit cherry-cursor__fruit--right" />
-      <span className="cherry-cursor__stem" />
-    </div>
   );
 }
 
@@ -382,7 +325,10 @@ function TypedStatement({ lines }) {
   const ref = useRef(null);
   const [started, setStarted] = useState(false);
   const [count, setCount] = useState(0);
-  const totalLength = lines.reduce((sum, line) => sum + line.text.length + 1, 0);
+  const totalLength = lines.reduce(
+    (sum, line) => sum + line.text.length + 1,
+    0,
+  );
 
   useEffect(() => {
     const node = ref.current;
@@ -398,7 +344,7 @@ function TypedStatement({ lines }) {
           observer.disconnect();
         }
       },
-      { threshold: 0.35 }
+      { threshold: 0.35 },
     );
 
     observer.observe(node);
@@ -415,9 +361,12 @@ function TypedStatement({ lines }) {
       return undefined;
     }
 
-    const timeout = window.setTimeout(() => {
-      setCount((current) => current + 1);
-    }, count < 80 ? 22 : 16);
+    const timeout = window.setTimeout(
+      () => {
+        setCount((current) => current + 1);
+      },
+      count < 80 ? 22 : 16,
+    );
 
     return () => window.clearTimeout(timeout);
   }, [count, started, totalLength]);
@@ -426,7 +375,7 @@ function TypedStatement({ lines }) {
     (accumulator, line) => {
       const visibleChars = Math.max(
         0,
-        Math.min(line.text.length, count - accumulator.consumed)
+        Math.min(line.text.length, count - accumulator.consumed),
       );
 
       return {
@@ -441,7 +390,7 @@ function TypedStatement({ lines }) {
         ],
       };
     },
-    { consumed: 0, items: [] }
+    { consumed: 0, items: [] },
   ).items;
 
   return (
@@ -545,8 +494,107 @@ function ScrollStackCards() {
 }
 
 function HeroBackground() {
+  const sceneRef = useRef(null);
+  const lensRef = useRef(null);
+  const lensVideoRef = useRef(null);
+
+  useEffect(() => {
+    if (!window.matchMedia("(pointer:fine)").matches) {
+      return undefined;
+    }
+
+    const scene = sceneRef.current;
+    const lens = lensRef.current;
+    const lensVideo = lensVideoRef.current;
+
+    if (!scene || !lens || !lensVideo) {
+      return undefined;
+    }
+
+    const lensSize = 168;
+    const lensHalf = lensSize / 2;
+    let bounds = scene.getBoundingClientRect();
+    let frame = 0;
+    let inside = false;
+    let targetX = bounds.width / 2;
+    let targetY = bounds.height / 2;
+    let currentX = targetX;
+    let currentY = targetY;
+    let lastX = targetX;
+    let lastY = targetY;
+
+    const updateBounds = () => {
+      bounds = scene.getBoundingClientRect();
+      lensVideo.style.width = `${bounds.width}px`;
+      lensVideo.style.height = `${bounds.height}px`;
+    };
+
+    const render = () => {
+      currentX += (targetX - currentX) * 0.18;
+      currentY += (targetY - currentY) * 0.18;
+
+      const velocity = Math.min(
+        32,
+        Math.hypot(currentX - lastX, currentY - lastY),
+      );
+      lastX = currentX;
+      lastY = currentY;
+
+      lens.style.opacity = inside ? "1" : "0";
+      lens.style.transform = `translate3d(${currentX - lensHalf}px, ${currentY - lensHalf}px, 0) scale(${inside ? 1 : 0.92})`;
+      lens.style.setProperty("--lens-velocity", velocity.toFixed(2));
+      lensVideo.style.transform = `translate3d(${-currentX + lensHalf}px, ${-currentY + lensHalf}px, 0) scale(${1.14 + velocity * 0.002})`;
+
+      if (
+        inside ||
+        Math.abs(targetX - currentX) > 0.1 ||
+        Math.abs(targetY - currentY) > 0.1
+      ) {
+        frame = window.requestAnimationFrame(render);
+      } else {
+        frame = 0;
+      }
+    };
+
+    const ensureFrame = () => {
+      if (!frame) {
+        frame = window.requestAnimationFrame(render);
+      }
+    };
+
+    const handleMove = (event) => {
+      updateBounds();
+      inside = true;
+      targetX = event.clientX - bounds.left;
+      targetY = event.clientY - bounds.top;
+      ensureFrame();
+    };
+
+    const handleLeave = () => {
+      inside = false;
+      ensureFrame();
+    };
+
+    updateBounds();
+    scene.addEventListener("pointermove", handleMove);
+    scene.addEventListener("pointerenter", handleMove);
+    scene.addEventListener("pointerleave", handleLeave);
+    window.addEventListener("resize", updateBounds);
+
+    return () => {
+      scene.removeEventListener("pointermove", handleMove);
+      scene.removeEventListener("pointerenter", handleMove);
+      scene.removeEventListener("pointerleave", handleLeave);
+      window.removeEventListener("resize", updateBounds);
+
+      if (frame) {
+        window.cancelAnimationFrame(frame);
+      }
+    };
+  }, []);
+
   return (
-    <div className="hero-scene absolute inset-0 overflow-hidden">
+    <div ref={sceneRef} className="hero-scene absolute inset-0 overflow-hidden">
       <video
         className="hero-scene__video"
         autoPlay
@@ -557,6 +605,47 @@ function HeroBackground() {
       >
         <source src="/cherryeffect.mp4" type="video/mp4" />
       </video>
+      <div ref={lensRef} className="hero-distortion-cursor" aria-hidden="true">
+        <svg className="hero-distortion-cursor__filter">
+          <filter id="hero-distortion-filter">
+            <feTurbulence
+              type="fractalNoise"
+              baseFrequency="0.012 0.03"
+              numOctaves="2"
+              seed="8"
+              result="noise"
+            >
+              <animate
+                attributeName="baseFrequency"
+                dur="7s"
+                values="0.012 0.03;0.02 0.05;0.012 0.03"
+                repeatCount="indefinite"
+              />
+            </feTurbulence>
+            <feDisplacementMap
+              in="SourceGraphic"
+              in2="noise"
+              scale="22"
+              xChannelSelector="R"
+              yChannelSelector="G"
+            />
+          </filter>
+        </svg>
+        <div className="hero-distortion-cursor__media">
+          <video
+            ref={lensVideoRef}
+            className="hero-distortion-cursor__video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+          >
+            <source src="/cherryeffect.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <span className="hero-distortion-cursor__glow" />
+      </div>
       {/* <div className="hero-scene__base" /> */}
       {/* <StarsBackground
         className="opacity-55"
@@ -602,7 +691,6 @@ function HeroBackground() {
 export default function SiteShell() {
   return (
     <>
-      <CherryCursor />
       <CircularBadge />
       <FloatingNav
         className="hidden lg:flex"
@@ -627,18 +715,14 @@ export default function SiteShell() {
             <nav className="hidden items-center gap-1 rounded-full border border-white/8 bg-white/4 px-3 py-2 lg:flex">
               {navItems.map((item) =>
                 item.href.startsWith("/") ? (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className="nav-pill"
-                  >
+                  <Link key={item.label} href={item.href} className="nav-pill">
                     {item.label}
                   </Link>
                 ) : (
                   <a key={item.label} href={item.href} className="nav-pill">
                     {item.label}
                   </a>
-                )
+                ),
               )}
             </nav>
 
@@ -650,7 +734,7 @@ export default function SiteShell() {
 
         <section className="relative isolate min-h-screen">
           <HeroBackground />
-          <div className="relative mx-auto flex min-h-screen max-w-7xl items-center px-4 py-24 sm:px-6 lg:px-10">
+          <div className="pointer-events-none relative mx-auto flex min-h-screen max-w-7xl items-center px-4 py-24 sm:px-6 lg:px-10">
             <div className="max-w-5xl space-y-10">
               <p className="inline-flex rounded-full border border-[#f5e6a8]/15 bg-[#f5e6a8]/6 px-4 py-2 text-xs font-semibold uppercase tracking-[0.45em] text-[#f5e6a8]/80">
                 Influence . Growth . Precision
@@ -780,7 +864,9 @@ export default function SiteShell() {
             <div className="grid gap-8 lg:grid-cols-3">
               {workCards.map((card, index) => (
                 <SectionReveal key={card.name} delay={index * 120}>
-                  <article className={`poster-card poster-card--${card.accent}`}>
+                  <article
+                    className={`poster-card poster-card--${card.accent}`}
+                  >
                     <div className="poster-card__shine" />
                     <div className="relative space-y-8">
                       <div className="flex items-center justify-between">
