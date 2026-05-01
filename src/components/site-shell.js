@@ -547,8 +547,18 @@ function ScrollStackCards() {
 function HeroBackground() {
   return (
     <div className="hero-scene absolute inset-0 overflow-hidden">
-      <div className="hero-scene__base" />
-      <StarsBackground
+      <video
+        className="hero-scene__video"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+      >
+        <source src="/cherryeffect.mp4" type="video/mp4" />
+      </video>
+      {/* <div className="hero-scene__base" /> */}
+      {/* <StarsBackground
         className="opacity-55"
         starDensity={0.00018}
         twinkleProbability={0.8}
@@ -561,13 +571,13 @@ function HeroBackground() {
         trailColor="#f5e6a8"
         minDelay={1400}
         maxDelay={3200}
-      />
+      /> */}
       <div className="hero-scene__vignette" />
       <div className="hero-scene__dots" />
-      <div className="hero-scene__orb hero-scene__orb--pink" />
+      {/* <div className="hero-scene__orb hero-scene__orb--pink" />
       <div className="hero-scene__orb hero-scene__orb--yellow" />
-      <div className="hero-scene__orb hero-scene__orb--green" />
-      {cherryPositions.map((cherry, index) => (
+      <div className="hero-scene__orb hero-scene__orb--green" /> */}
+      {/* {cherryPositions.map((cherry, index) => (
         <div
           key={index}
           className="floating-cherry"
@@ -583,7 +593,7 @@ function HeroBackground() {
           <span className="floating-cherry__fruit floating-cherry__fruit--right" />
           <span className="floating-cherry__stem" />
         </div>
-      ))}
+      ))} */}
       <div className="noise-overlay" />
     </div>
   );
