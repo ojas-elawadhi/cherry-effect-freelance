@@ -509,22 +509,21 @@ body {
   color: var(--yellow);
 }
 
-.circular-badge__ring {
+.circular-badge__reactbits {
   position: absolute;
   inset: 0;
-  animation: spinBadge 16s linear infinite;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  color: rgba(245, 230, 168, 0.78) !important;
 }
 
-.circular-badge__ring span {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform-origin: center 34px;
-  font-size: 0.74rem;
+.circular-badge__reactbits span {
+  font-size: 0.76rem !important;
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(245, 230, 168, 0.78);
+  color: rgba(245, 230, 168, 0.78) !important;
 }
 
 .type-cursor {
