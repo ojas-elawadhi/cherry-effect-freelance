@@ -3,17 +3,15 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
-import { CardSpotlight } from "@/components/ui/card-spotlight";
 import { FloatingNav } from "@/components/ui/floating-navbar";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
-import { MacbookScroll } from "@/components/ui/macbook-scroll";
 import { ShootingStars } from "@/components/ui/shooting-stars";
 import { StarsBackground } from "@/components/ui/stars-background";
 import CircularText from "@/components/CircularText";
+import ScrollStack, { ScrollStackItem } from "./ScrollStack";
 import ContactForm from "./contact-form";
 
 const navItems = [
-  { label: "Work", href: "#work" },
   { label: "About Us", href: "#about" },
   { label: "Services", href: "#services" },
   { label: "Article", href: "/article" },
@@ -25,45 +23,18 @@ const heroWords = ["INFLUENCE", "GROWTH", "PRECISION"];
 const problemCards = [
   {
     title: "Your brand looks fine.",
-    body: "It just does not mean anything.",
-    tone: "pink",
+    body: "It just doesn't mean anything.",
+    tone: "purple",
   },
   {
     title: "Your content is active.",
-    body: "But it is not doing anything.",
+    body: "But it's not doing anything.",
     tone: "yellow",
   },
   {
     title: "Your business runs.",
-    body: "But it is not set up to scale.",
+    body: "But it's not set up to scale.",
     tone: "green",
-  },
-];
-
-const workCards = [
-  {
-    tag: "Positioning Reset",
-    name: "Luma Skincare",
-    blurb:
-      "Strategy, creative direction, funnel cleanup, and sharper language across the buyer journey.",
-    accent: "pink",
-    metric: "Recall up. Wastage down.",
-  },
-  {
-    tag: "Launch System",
-    name: "Northline Kitchens",
-    blurb:
-      "From zero clarity to a full launch story with content systems, paid media, and product-led landing pages.",
-    accent: "yellow",
-    metric: "A clearer brand hit harder.",
-  },
-  {
-    tag: "Scale Engine",
-    name: "Vera Clinics",
-    blurb:
-      "Offer refinement, conversion-focused campaigns, and operational systems that turned traction into pace.",
-    accent: "green",
-    metric: "Growth stopped feeling random.",
   },
 ];
 
@@ -455,41 +426,44 @@ function SplitHeadline({ text, className = "" }) {
 }
 
 function ScrollStackCards() {
+  const toneClasses = {
+    purple: "bg-[#2d1148] text-[#f8edff]",
+    yellow: "bg-[#f5e6a8] text-[#2e2608]",
+    green: "bg-[#00a86b] text-[#041f16]",
+  };
+
   return (
-    <div className="relative">
+    <ScrollStack
+      useWindowScroll
+      itemDistance={90}
+      itemScale={0.04}
+      itemStackDistance={36}
+      stackPosition="18%"
+      scaleEndPosition="10%"
+      baseScale={0.9}
+      className="w-full"
+    >
       {problemCards.map((card, index) => (
-        <div
+        <ScrollStackItem
           key={card.title}
-          className={`lg:h-[74vh] ${index !== problemCards.length - 1 ? "mb-6" : ""}`}
+          itemClassName={`border border-white/12 shadow-[0_24px_80px_rgba(0,0,0,0.45)] min-h-[300px] h-auto p-8 sm:p-10 lg:p-14 ${
+            toneClasses[card.tone]
+          }`}
         >
-          <div className="lg:sticky lg:top-28">
-            <CardSpotlight
-              radius={300}
-              color={
-                card.tone === "pink"
-                  ? "#3b0a28"
-                  : card.tone === "yellow"
-                    ? "#42381c"
-                    : "#0c3628"
-              }
-              className="rounded-[2rem] border-white/10 bg-[#090909]/92 p-8 sm:p-10"
-            >
-              <div className="relative z-10 space-y-8">
-                <p className="text-sm font-semibold uppercase tracking-[0.32em] text-[#f5e6a8]/46">
-                  0{index + 1}
-                </p>
-                <h3 className="text-3xl font-black uppercase leading-tight tracking-[-0.05em] text-[#f5e6a8] sm:text-5xl">
-                  {card.title}
-                </h3>
-                <p className="max-w-2xl text-lg leading-8 text-[#f5e6a8]/76 sm:text-2xl sm:leading-10">
-                  {card.body}
-                </p>
-              </div>
-            </CardSpotlight>
+          <div className="space-y-6">
+            <p className="text-sm font-semibold uppercase tracking-[0.32em] opacity-70">
+              0{index + 1}
+            </p>
+            <h3 className="text-3xl font-black leading-tight tracking-[-0.05em] sm:text-5xl">
+              {card.title}
+            </h3>
+            <p className="max-w-2xl text-lg leading-8 sm:text-2xl sm:leading-10">
+              {card.body}
+            </p>
           </div>
-        </div>
+        </ScrollStackItem>
       ))}
-    </div>
+    </ScrollStack>
   );
 }
 
@@ -824,78 +798,6 @@ export default function SiteShell() {
           </div>
         </section>
 
-        <section id="work" className="px-4 py-24 sm:px-6 lg:px-10">
-          <div className="mx-auto max-w-6xl space-y-14">
-            <SectionReveal className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
-              <div className="space-y-4">
-                <p className="text-xs font-semibold uppercase tracking-[0.42em] text-[#ff0095]">
-                  Our Work
-                </p>
-                <h2 className="max-w-3xl text-4xl font-black uppercase leading-none tracking-[-0.06em] text-[#f5e6a8] sm:text-6xl">
-                  The work has to feel alive before it performs alive.
-                </h2>
-              </div>
-              <p className="max-w-xl text-base leading-8 text-[#f5e6a8]/68">
-                Positioning, creative, landing pages, and growth systems are
-                built as one experience. Not separate departments. Not random
-                output.
-              </p>
-            </SectionReveal>
-
-            <div className="overflow-hidden rounded-[2.5rem] border border-white/8 bg-black/30">
-              <MacbookScroll
-                src="/cherry-dashboard.svg"
-                showGradient={false}
-                title={
-                  <span className="text-center text-4xl font-black uppercase leading-none tracking-[-0.06em] text-[#f5e6a8] sm:text-6xl">
-                    Our projects come to life.
-                    <br />
-                    Quite literally.
-                  </span>
-                }
-                badge={
-                  <span className="rounded-full border border-[#ff0095]/30 bg-[#ff0095]/12 px-4 py-2 text-xs font-black uppercase tracking-[0.35em] text-[#f5e6a8]">
-                    The Cherry Effect
-                  </span>
-                }
-              />
-            </div>
-
-            <div className="grid gap-8 lg:grid-cols-3">
-              {workCards.map((card, index) => (
-                <SectionReveal key={card.name} delay={index * 120}>
-                  <article
-                    className={`poster-card poster-card--${card.accent}`}
-                  >
-                    <div className="poster-card__shine" />
-                    <div className="relative space-y-8">
-                      <div className="flex items-center justify-between">
-                        <span className="rounded-full border border-white/15 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-[#f5e6a8]/74">
-                          {card.tag}
-                        </span>
-                        <span className="text-[0.65rem] font-semibold uppercase tracking-[0.35em] text-[#f5e6a8]/50">
-                          Case {index + 1}
-                        </span>
-                      </div>
-                      <div className="space-y-4">
-                        <h3 className="text-3xl font-black uppercase tracking-[-0.05em] text-[#f5e6a8]">
-                          {card.name}
-                        </h3>
-                        <p className="text-sm leading-7 text-[#f5e6a8]/72">
-                          {card.blurb}
-                        </p>
-                      </div>
-                      <p className="text-sm font-semibold uppercase tracking-[0.28em] text-white">
-                        {card.metric}
-                      </p>
-                    </div>
-                  </article>
-                </SectionReveal>
-              ))}
-            </div>
-          </div>
-        </section>
-
         <section className="px-4 py-24 sm:px-6 lg:px-10">
           <div className="mx-auto max-w-6xl space-y-14">
             <SectionReveal className="space-y-4 text-center">
@@ -910,7 +812,7 @@ export default function SiteShell() {
             <ScrollStackCards />
 
             <SectionReveal className="text-center">
-              <p className="text-3xl font-black uppercase tracking-[-0.05em] text-[#ff0095] sm:text-5xl">
+              <p className="text-3xl font-black tracking-[-0.05em] text-[#ff0095] sm:text-5xl">
                 We fix the full picture.
               </p>
             </SectionReveal>
