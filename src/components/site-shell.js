@@ -439,9 +439,9 @@ function SplitHeadline({ text, className = "" }) {
               filter: "blur(0px)",
               transition: {
                 type: "spring",
-                bounce: 0.38,
-                duration: 0.9,
-                delay: index * 0.06,
+                bounce: 0.69,
+                duration: 1.2,
+                delay: index * 0.069,
               },
             },
           }}
