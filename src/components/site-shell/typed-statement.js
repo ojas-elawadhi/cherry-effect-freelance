@@ -80,7 +80,11 @@ export default function TypedStatement({ lines }) {
         <p
           key={line.text}
           className={`text-lg leading-8 sm:text-xl sm:leading-9 ${
-            line.accent === "pink" ? "text-[#ff0095]" : "text-[#f5e6a8]"
+            line.accent === "pink"
+              ? "text-[#ff0095]"
+              : line.accent === "yellow"
+                ? "text-[#f5e6a8]"
+                : "text-[#f5e6a8]"
           }`}
         >
           {line.content}

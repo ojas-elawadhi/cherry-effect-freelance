@@ -18,8 +18,12 @@ export const aboutStatementLines = [
     text: "Startups, founders, and enterprises get the same approach: sharp positioning, decisive action, measurable growth.",
   },
   {
-    text: "360-degree clarity. Zero guesswork. Pure human insight. Because when you understand people, growth is inevitable.",
+    text: "360-degree clarity. Zero guesswork. Pure human insight.",
     accent: "pink",
+  },
+  {
+    text: "Because when you understand people, growth is inevitable.",
+    accent: "yellow",
   },
 ];
 
