@@ -9,7 +9,7 @@ export default function SplitHeadline({ text, className = "" }) {
     <motion.p
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.72 }}
+      viewport={{ once: false, amount: 0.35 }}
       className={className}
     >
       {words.map((word, index) => (

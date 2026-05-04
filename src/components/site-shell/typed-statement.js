@@ -22,8 +22,11 @@ export default function TypedStatement({ lines }) {
       ([entry]) => {
         if (entry.isIntersecting) {
           setStarted(true);
-          observer.disconnect();
+          return;
         }
+
+        setStarted(false);
+        setCount(0);
       },
       { threshold: 0.35 },
     );
