@@ -2,14 +2,28 @@
 
 import { motion } from "motion/react";
 
-export default function SplitHeadline({ text, className = "" }) {
+export default function SplitHeadline({
+  text,
+  className = "",
+  wordStagger = 0.069,
+  viewportAmount = 0.35,
+  viewportMargin = "0px 0px 0px 0px",
+}) {
   const words = text.split(" ");
 
   return (
     <motion.p
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: false, amount: 0.35 }}
+      viewport={{ once: false, amount: viewportAmount, margin: viewportMargin }}
+      variants={{
+        hidden: {},
+        visible: {
+          transition: {
+            staggerChildren: wordStagger,
+          },
+        },
+      }}
       className={className}
     >
       {words.map((word, index) => (
@@ -31,7 +45,6 @@ export default function SplitHeadline({ text, className = "" }) {
                 type: "spring",
                 bounce: 0.69,
                 duration: 1.2,
-                delay: index * 0.069,
               },
             },
           }}
