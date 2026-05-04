@@ -531,8 +531,8 @@ body {
 
 .circular-badge {
   position: fixed;
-  width: 10.5rem;
-  height: 10.5rem;
+  width: 8.5rem;
+  height: 8.5rem;
   border-radius: 999px;
   border: 1px solid rgba(245, 230, 168, 0.12);
   background: rgba(5, 5, 5, 0.58);
@@ -545,12 +545,12 @@ body {
 
 .circular-badge:hover {
   transform: scale(1.04);
-  border-color: rgba(255, 0, 149, 0.35);
+  /* border-color: rgba(255, 0, 149, 0.35); */
 }
 
 .circular-badge__core {
   position: absolute;
-  inset: 1.65rem;
+  inset: 1.5rem;
   display: grid;
   place-items: center;
   border-radius: 999px;
@@ -575,7 +575,7 @@ body {
 }
 
 .circular-badge__reactbits span {
-  font-size: 0.76rem !important;
+  font-size: 0.7rem !important;
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
