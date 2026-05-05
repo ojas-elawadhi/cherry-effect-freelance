@@ -1,5 +1,6 @@
 "use client";
 
+import CustomCursor from "./custom-cursor";
 import AboutSection from "./site-shell/about-section";
 import ArticlesSection from "./site-shell/articles-section";
 import ContactSection from "./site-shell/contact-section";
@@ -16,6 +17,7 @@ import SiteNavigation from "./site-shell/site-navigation";
 export default function SiteShell() {
   return (
     <>
+      <CustomCursor />
       <SiteNavigation />
       <main className="relative overflow-hidden bg-[#050505] text-[#f5e6a8]">
         <SiteHeader />

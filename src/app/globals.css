@@ -131,6 +131,42 @@ body {
     linear-gradient(180deg, #050505 0%, #090909 100%);
 }
 
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+
+  a,
+  button,
+  [role="button"],
+  label,
+  summary,
+  input[type="submit"],
+  input[type="button"] {
+    cursor: none;
+  }
+
+  input,
+  select,
+  textarea,
+  [contenteditable="true"] {
+    cursor: text;
+  }
+}
+
+.custom-cursor {
+  opacity: 0;
+  transform: translate3d(-9999px, -9999px, 0);
+  transition:
+    opacity 140ms ease,
+    transform 40ms linear;
+  will-change: transform, opacity;
+}
+
+.custom-cursor[data-visible="true"] {
+  opacity: 1;
+}
+
 ::selection {
   background: rgba(255, 0, 149, 0.88);
   color: #fff7dc;
@@ -240,7 +276,7 @@ body {
 }
 
 .hero-scene {
-  cursor: none;
+  cursor: inherit;
 }
 
 .hero-scene__video {
