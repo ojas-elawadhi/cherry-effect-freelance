@@ -251,6 +251,35 @@ body {
   box-shadow: 0 24px 60px rgba(255, 0, 149, 0.45);
 }
 
+.site-shell {
+  --footer-reveal-height: 100svh;
+  position: relative;
+}
+
+.site-shell__content {
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 36px 110px rgba(0, 0, 0, 0.52);
+}
+
+.site-shell__footer-spacer {
+  height: var(--footer-reveal-height);
+}
+
+.site-shell__footer {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 0;
+  height: var(--footer-reveal-height);
+  display: flex;
+  align-items: stretch;
+  background:
+    linear-gradient(180deg, rgba(5, 5, 5, 0.7) 0%, rgba(5, 5, 5, 0.96) 18%, #050505 100%),
+    radial-gradient(circle at top left, rgba(255, 0, 149, 0.14), transparent 30%),
+    radial-gradient(circle at 78% 28%, rgba(0, 168, 107, 0.12), transparent 26%);
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(48px);

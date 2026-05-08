@@ -16,10 +16,10 @@ import SiteNavigation from "./site-shell/site-navigation";
 
 export default function SiteShell() {
   return (
-    <>
+    <div className="site-shell">
       <CustomCursor />
       <SiteNavigation />
-      <main className="relative overflow-hidden bg-[#050505] text-[#f5e6a8]">
+      <main className="site-shell__content relative overflow-hidden bg-[#050505] text-[#f5e6a8]">
         <SiteHeader />
         <HeroSection />
         <NoiseSection />
@@ -30,8 +30,9 @@ export default function SiteShell() {
         <ProofSection />
         <ArticlesSection />
         <ContactSection />
-        <SiteFooter />
       </main>
-    </>
+      <div aria-hidden="true" className="site-shell__footer-spacer" />
+      <SiteFooter />
+    </div>
   );
 }
