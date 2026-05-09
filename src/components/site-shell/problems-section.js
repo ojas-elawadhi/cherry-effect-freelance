@@ -17,7 +17,7 @@ export default function ProblemsSection() {
         <ScrollStackCards />
 
         <SectionReveal className="text-center">
-          <p className="text-3xl font-black tracking-[-0.05em] text-[#ff0095] sm:text-5xl">
+          <p className="text-3xl font-black tracking-[-0.05em] text-[#ff0095] sm:text-7xl">
             We fix the full picture.
           </p>
         </SectionReveal>
