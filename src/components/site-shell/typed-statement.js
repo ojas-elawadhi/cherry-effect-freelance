@@ -84,10 +84,10 @@ export default function TypedStatement({ lines }) {
           key={line.text}
           className={`text-lg leading-8 sm:text-xl sm:leading-9 ${
             line.accent === "pink"
-              ? "text-[#ff0095]"
+              ? "text-primary"
               : line.accent === "yellow"
-                ? "text-[#f5e6a8]"
-                : "text-[#f5e6a8]"
+                ? "text-foreground"
+                : "text-foreground"
           }`}
         >
           {line.content}
@@ -99,3 +99,4 @@ export default function TypedStatement({ lines }) {
     </div>
   );
 }
+

@@ -42,7 +42,7 @@ export default function SiteFooter() {
         <div className="space-y-6">
           <Link
             href="/"
-            className="inline-flex items-center text-[#f5e6a8] transition hover:text-[#ff0095]"
+            className="inline-flex items-center text-foreground transition hover:text-primary"
           >
             <Image
               src="/TCELogo.png"
@@ -52,11 +52,11 @@ export default function SiteFooter() {
               className="h-auto w-[16rem] shrink-0 sm:w-[20rem] lg:w-[26rem]"
             />
           </Link>
-          <p className="max-w-2xl text-4xl font-black uppercase leading-none tracking-[-0.06em] text-[#f5e6a8] sm:text-5xl lg:text-7xl">
+          <p className="max-w-2xl text-4xl font-black uppercase leading-none tracking-[-0.06em] text-foreground sm:text-5xl lg:text-7xl">
             Make people want you.
           </p>
         </div>
-        <div className="ml-auto max-w-xl space-y-3 text-right text-lg leading-8 text-[#f5e6a8]/70 sm:text-xl">
+        <div className="ml-auto max-w-xl space-y-3 text-right text-lg leading-8 text-foreground/70 sm:text-xl">
           <p>Most brands try.</p>
           <p>Some stand out.</p>
           <p>Very few get chosen.</p>
@@ -65,3 +65,4 @@ export default function SiteFooter() {
     </footer>
   );
 }
+

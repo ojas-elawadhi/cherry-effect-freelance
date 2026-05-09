@@ -35,9 +35,10 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`dark ${displayFont.variable} ${bodyFont.variable} ${pixelFont.variable} ${monoFont.variable} h-full scroll-smooth antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-[#050505] text-[#f5e6a8]">
+      <body className="flex min-h-full flex-col bg-background text-foreground">
         {children}
       </body>
     </html>
   );
 }
+

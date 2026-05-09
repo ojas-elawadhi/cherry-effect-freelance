@@ -77,7 +77,7 @@ export const MacbookScroll = ({
         className="relative -z-10 h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
         {/* above keyboard bar */}
         <div className="relative h-10 w-full">
-          <div className="absolute inset-x-0 mx-auto h-4 w-[80%] bg-[#050505]" />
+          <div className="absolute inset-x-0 mx-auto h-4 w-[80%] bg-background" />
         </div>
         <div className="relative flex">
           <div className="mx-auto h-full w-[10%] overflow-hidden">
@@ -92,7 +92,7 @@ export const MacbookScroll = ({
         </div>
         <Trackpad />
         <div
-          className="absolute inset-x-0 bottom-0 mx-auto h-2 w-20 rounded-tl-3xl rounded-tr-3xl bg-gradient-to-t from-[#272729] to-[#050505]" />
+          className="absolute inset-x-0 bottom-0 mx-auto h-2 w-20 rounded-tl-3xl rounded-tr-3xl bg-gradient-to-t from-[#272729] to-background" />
         {showGradient && (
           <div
             className="absolute inset-x-0 bottom-0 z-50 h-40 w-full bg-gradient-to-t from-white via-white to-transparent dark:from-black dark:via-black"></div>
@@ -162,7 +162,7 @@ export const Trackpad = () => {
 export const Keypad = () => {
   return (
     <div
-      className="mx-1 h-full [transform:translateZ(0)] rounded-md bg-[#050505] p-1 [will-change:transform]">
+      className="mx-1 h-full [transform:translateZ(0)] rounded-md bg-background p-1 [will-change:transform]">
       {/* First Row */}
       <div className="mb-[2px] flex w-full shrink-0 gap-[2px]">
         <KBtn
@@ -592,3 +592,4 @@ const AceternityLogo = () => {
     </svg>
   );
 };
+

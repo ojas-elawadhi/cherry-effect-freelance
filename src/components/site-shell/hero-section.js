@@ -10,7 +10,7 @@ export default function HeroSection() {
         <div className="flex w-full flex-col items-center">
           <HeroWordRotator words={heroWords} />
 
-          <p className="hero-subtext absolute inset-x-0 bottom-10 mx-auto px-4 text-center text-sm leading-6 text-[#f5e6a8]/78 sm:bottom-12 sm:text-base sm:leading-7">
+          <p className="hero-subtext absolute inset-x-0 bottom-10 mx-auto px-4 text-center text-sm leading-6 text-foreground/78 sm:bottom-12 sm:text-base sm:leading-7">
             Not more content. Not more ads. Just better decisions.
           </p>
         </div>
@@ -18,3 +18,4 @@ export default function HeroSection() {
     </section>
   );
 }
+

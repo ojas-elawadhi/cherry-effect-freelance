@@ -7,7 +7,7 @@ export default function AboutSection() {
     <section id="about" className="px-4 py-24 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-8">
         <SectionReveal>
-          <h2 className="text-xs font-semibold uppercase tracking-[0.42em] text-[#00a86b]">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.42em] text-brand-green">
             About Us
           </h2>
         </SectionReveal>
@@ -18,3 +18,4 @@ export default function AboutSection() {
     </section>
   );
 }
+

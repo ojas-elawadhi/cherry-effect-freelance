@@ -6,10 +6,10 @@ export default function ProblemsSection() {
     <section className="px-4 py-24 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-14">
         <SectionReveal className="space-y-4 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.42em] text-[#ff0095]">
+          <p className="text-xs font-semibold uppercase tracking-[0.42em] text-primary">
             What We Fix
           </p>
-          <h2 className="text-4xl font-black uppercase leading-none tracking-[-0.06em] text-[#f5e6a8] sm:text-6xl">
+          <h2 className="text-4xl font-black uppercase leading-none tracking-[-0.06em] text-foreground sm:text-6xl">
             What we fix.
           </h2>
         </SectionReveal>
@@ -17,7 +17,7 @@ export default function ProblemsSection() {
         <ScrollStackCards />
 
         <SectionReveal className="text-center">
-          <p className="text-3xl font-black tracking-[-0.05em] text-[#ff0095] sm:text-7xl">
+          <p className="text-3xl font-black tracking-[-0.05em] text-primary sm:text-7xl">
             We fix the full picture.
           </p>
         </SectionReveal>
@@ -25,3 +25,4 @@ export default function ProblemsSection() {
     </section>
   );
 }
+

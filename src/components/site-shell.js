@@ -19,7 +19,7 @@ export default function SiteShell() {
     <div className="site-shell">
       <CustomCursor />
       <SiteNavigation />
-      <main className="site-shell__content relative overflow-x-clip bg-[#050505] text-[#f5e6a8]">
+      <main className="site-shell__content relative overflow-x-clip bg-background text-foreground">
         <SiteHeader />
         <HeroSection />
         <NoiseSection />
@@ -36,3 +36,4 @@ export default function SiteShell() {
     </div>
   );
 }
+

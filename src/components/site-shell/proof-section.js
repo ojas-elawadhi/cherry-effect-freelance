@@ -8,13 +8,13 @@ export default function ProofSection() {
     <section className="px-4 py-24 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-14">
         <SectionReveal className="space-y-4 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.42em] text-[#00a86b]">
+          <p className="text-xs font-semibold uppercase tracking-[0.42em] text-brand-green">
             Proof, Softly
           </p>
-          <h2 className="text-4xl font-black uppercase leading-none tracking-[-0.06em] text-[#f5e6a8] sm:text-6xl">
+          <h2 className="text-4xl font-black uppercase leading-none tracking-[-0.06em] text-foreground sm:text-6xl">
             Let&apos;s do great work.
           </h2>
-          <p className="mx-auto max-w-3xl text-base leading-8 text-[#f5e6a8]/70">
+          <p className="mx-auto max-w-3xl text-base leading-8 text-foreground/70">
             We are not here to hide behind reports or noise. We are here to
             make sure your brand makes sense, your marketing works, and your
             business grows without confusion.
@@ -32,10 +32,10 @@ export default function ProofSection() {
           {proofItems.map((item, index) => (
             <SectionReveal key={item} delay={index * 100}>
               <article className="rounded-[1.75rem] border border-white/8 bg-white/4 p-6 text-center">
-                <p className="text-sm font-semibold uppercase tracking-[0.35em] text-[#f5e6a8]/48">
+                <p className="text-sm font-semibold uppercase tracking-[0.35em] text-foreground/48">
                   Signal {index + 1}
                 </p>
-                <p className="mt-6 text-2xl font-black uppercase leading-snug tracking-[-0.05em] text-[#f5e6a8]">
+                <p className="mt-6 text-2xl font-black uppercase leading-snug tracking-[-0.05em] text-foreground">
                   {item}
                 </p>
               </article>
@@ -45,26 +45,26 @@ export default function ProofSection() {
 
         <SectionReveal className="grid gap-6 rounded-[2rem] border border-white/8 bg-white/4 p-6 text-center md:grid-cols-3 md:text-left">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[#ff0095]">
+            <p className="text-xs font-semibold uppercase tracking-[0.34em] text-primary">
               360
             </p>
-            <p className="mt-3 text-xl font-bold uppercase tracking-[-0.04em] text-[#f5e6a8]">
+            <p className="mt-3 text-xl font-bold uppercase tracking-[-0.04em] text-foreground">
               Clarity first
             </p>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[#f5e6a8]">
+            <p className="text-xs font-semibold uppercase tracking-[0.34em] text-foreground">
               0
             </p>
-            <p className="mt-3 text-xl font-bold uppercase tracking-[-0.04em] text-[#f5e6a8]">
+            <p className="mt-3 text-xl font-bold uppercase tracking-[-0.04em] text-foreground">
               Guesswork tolerated
             </p>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[#00a86b]">
+            <p className="text-xs font-semibold uppercase tracking-[0.34em] text-brand-green">
               5
             </p>
-            <p className="mt-3 text-xl font-bold uppercase tracking-[-0.04em] text-[#f5e6a8]">
+            <p className="mt-3 text-xl font-bold uppercase tracking-[-0.04em] text-foreground">
               Steps to better growth
             </p>
           </div>
@@ -73,3 +73,4 @@ export default function ProofSection() {
     </section>
   );
 }
+

@@ -24,7 +24,7 @@ function SubmitButton() {
     <button
       type="submit"
       disabled={pending}
-      className="inline-flex w-full items-center justify-center rounded-full border border-[#ff0095]/30 bg-[#ff0095] px-6 py-4 text-sm font-bold uppercase tracking-[0.24em] text-white transition hover:-translate-y-0.5 hover:border-[#f5e6a8]/40 hover:bg-[#ff3ba9] disabled:cursor-not-allowed disabled:opacity-70"
+      className="inline-flex w-full items-center justify-center rounded-full border border-primary/30 bg-primary px-6 py-4 text-sm font-bold uppercase tracking-[0.24em] text-white transition hover:-translate-y-0.5 hover:border-brand-yellow/40 hover:bg-[#ff3ba9] disabled:cursor-not-allowed disabled:opacity-70"
     >
       {pending ? "Sending..." : "Get Free Assessment"}
     </button>
@@ -33,10 +33,10 @@ function SubmitButton() {
 
 function Field({ label, name, type = "text", rows, defaultValue, required = true }) {
   const baseClassName =
-    "w-full rounded-[1.35rem] border border-white/10 bg-white/5 px-4 py-4 text-sm text-[#f5e6a8] outline-none transition placeholder:text-[#f5e6a8]/32 focus:border-[#00a86b] focus:bg-white/8";
+    "w-full rounded-[1.35rem] border border-white/10 bg-white/5 px-4 py-4 text-sm text-foreground outline-none transition placeholder:text-foreground/32 focus:border-brand-green focus:bg-white/8";
 
   return (
-    <label className="space-y-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#f5e6a8]/58">
+    <label className="space-y-3 text-xs font-semibold uppercase tracking-[0.3em] text-foreground/58">
       <span>{label}</span>
       {rows ? (
         <textarea
@@ -109,7 +109,7 @@ export default function ContactForm() {
         <p
           aria-live="polite"
           className={`max-w-xl text-sm leading-7 ${
-            state.status === "success" ? "text-[#00a86b]" : "text-[#f5e6a8]/70"
+            state.status === "success" ? "text-brand-green" : "text-foreground/70"
           }`}
         >
           {state.message ||
@@ -122,3 +122,4 @@ export default function ContactForm() {
     </form>
   );
 }
+

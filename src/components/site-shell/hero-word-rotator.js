@@ -29,10 +29,11 @@ export default function HeroWordRotator({ words }) {
     <div className="relative h-[3.2rem] w-full text-center sm:h-[4.4rem] lg:h-[6.8rem]">
       <div
         key={words[activeIndex]}
-        className="hero-word hero-word--cycle absolute inset-0 flex items-center justify-center [font-family:var(--font-press-start)] text-[2.8rem] leading-none tracking-[-0.08em] text-[#f5e6a8] sm:text-[4rem] lg:text-[6.4rem]"
+        className="hero-word hero-word--cycle absolute inset-0 flex items-center justify-center [font-family:var(--font-press-start)] text-[2.8rem] leading-none tracking-[-0.08em] text-foreground sm:text-[4rem] lg:text-[6.4rem]"
       >
         {words[activeIndex]}
       </div>
     </div>
   );
 }
+

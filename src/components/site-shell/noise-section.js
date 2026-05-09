@@ -14,19 +14,19 @@ export default function NoiseSection() {
           />
           <SplitHeadline
             text="Most agencies?"
-            className="text-4xl font-black uppercase leading-none tracking-[-0.07em] text-[#f5e6a8] sm:text-6xl lg:text-7xl"
+            className="text-4xl font-black uppercase leading-none tracking-[-0.07em] text-foreground sm:text-6xl lg:text-7xl"
             viewportAmount={1}
             viewportMargin="0px 0px -18% 0px"
           />
           <SplitHeadline
             text="Even louder."
-            className="text-5xl font-black uppercase leading-none tracking-[-0.07em] text-[#f5e6a8] sm:text-7xl lg:text-[6.2rem]"
+            className="text-5xl font-black uppercase leading-none tracking-[-0.07em] text-foreground sm:text-7xl lg:text-[6.2rem]"
             viewportAmount={1}
             viewportMargin="0px 0px -18% 0px"
           />
           <SplitHeadline
             text="We do not play that game."
-            className="text-[2.7rem] font-black uppercase leading-none tracking-[-0.07em] text-[#00a86b] sm:text-6xl lg:text-[6.8rem]"
+            className="text-[2.7rem] font-black uppercase leading-none tracking-[-0.07em] text-brand-green sm:text-6xl lg:text-[6.8rem]"
             viewportAmount={1}
             viewportMargin="0px 0px -18% 0px"
           />
@@ -35,3 +35,4 @@ export default function NoiseSection() {
     </section>
   );
 }
+

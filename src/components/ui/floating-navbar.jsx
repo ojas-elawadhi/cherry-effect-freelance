@@ -61,7 +61,7 @@ export const FloatingNav = ({
                 key={`link-${idx}`}
                 href={navItem.link}
                 className={cn(
-                  "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium text-[#f5e6a8]/72 transition-colors hover:bg-white/10 hover:text-white dark:text-[#f5e6a8]/72 dark:hover:bg-white/10 dark:hover:text-white"
+                  "relative flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium text-foreground/72 transition-colors hover:bg-white/10 hover:text-white dark:text-foreground/72 dark:hover:bg-white/10 dark:hover:text-white"
                 )}>
                 <span className="block sm:hidden">{navItem.icon}</span>
                 <span className="hidden sm:block">{navItem.name}</span>
@@ -74,7 +74,7 @@ export const FloatingNav = ({
           {showCta ? (
             <a
               href={ctaHref}
-              className="relative rounded-full bg-[#ff0095] px-4 py-2 text-sm font-medium text-white transition-all hover:bg-[#ff2ea4] hover:shadow-lg hover:shadow-[#ff0095]/30"
+              className="relative rounded-full bg-primary px-4 py-2 text-sm font-medium text-white transition-all hover:bg-[#ff2ea4] hover:shadow-lg hover:shadow-primary/30"
             >
               <span>{ctaLabel}</span>
             </a>
@@ -84,3 +84,4 @@ export const FloatingNav = ({
     </AnimatePresence>
   );
 };
+

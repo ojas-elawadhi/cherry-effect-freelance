@@ -4,8 +4,8 @@ import { problemCards } from "./data";
 
 const toneClasses = {
   purple: "bg-[#2d1148] text-[#f8edff]",
-  yellow: "bg-[#f5e6a8] text-[#2e2608]",
-  green: "bg-[#00a86b] text-[#041f16]",
+  yellow: "bg-brand-yellow text-[#2e2608]",
+  green: "bg-brand-green text-[#041f16]",
 };
 
 export default function ScrollStackCards() {
@@ -43,3 +43,4 @@ export default function ScrollStackCards() {
     </ScrollStack>
   );
 }
+
