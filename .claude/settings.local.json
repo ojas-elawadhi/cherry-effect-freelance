@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node scripts/strip-logo-bg.mjs)",
+      "Bash(node -e \"const sharp=require\\('sharp'\\);sharp\\('public/TCELogo-nobg.png'\\).raw\\(\\).toBuffer\\({resolveWithObject:true}\\).then\\(\\({data,info}\\)=>{const c=info.channels;const corner=data[3];const mid=data[\\(Math.floor\\(info.height/2\\)*info.width+Math.floor\\(info.width/2\\)\\)*c+3];console.log\\('channels',c,'corner alpha',corner,'center alpha',mid\\)}\\)\")"
+    ]
+  }
+}

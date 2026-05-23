@@ -12,7 +12,7 @@ export default function SiteHeader() {
           className="flex items-center gap-3 text-sm font-black uppercase tracking-[0.45em] text-foreground transition hover:text-primary"
         >
           <Image
-            src="/TCELogo.png"
+            src="/TCELogo-nobg.png"
             alt="The Cherry Effect logo"
             width={124}
             height={46}

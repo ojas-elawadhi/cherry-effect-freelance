@@ -456,8 +456,15 @@ body {
 
 .hero-subtext {
   opacity: 0;
-  animation: heroReveal 860ms ease forwards;
-  animation-delay: 520ms;
+  transform: translateY(28px) scale(0.98);
+  transition:
+    opacity 860ms ease,
+    transform 860ms ease;
+}
+
+.hero-subtext.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 .noise-overlay {
@@ -889,8 +896,8 @@ body {
 
 .circular-badge {
   position: fixed;
-  width: 8.5rem;
-  height: 8.5rem;
+  width: 6.5rem;
+  height: 6.5rem;
   border-radius: 999px;
   border: 1px solid rgba(245, 230, 168, 0.12);
   background: rgba(5, 5, 5, 0.58);
@@ -908,7 +915,7 @@ body {
 
 .circular-badge__core {
   position: absolute;
-  inset: 1.5rem;
+  inset: 1.15rem;
   display: grid;
   place-items: center;
   border-radius: 999px;
@@ -916,9 +923,9 @@ body {
   background:
     radial-gradient(circle at top, rgba(255, 0, 149, 0.2), transparent 55%),
     rgba(255, 255, 255, 0.04);
-  font-size: 0.85rem;
+  font-size: 0.7rem;
   font-weight: 900;
-  letter-spacing: 0.36em;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--yellow);
 }
@@ -933,7 +940,7 @@ body {
 }
 
 .circular-badge__reactbits span {
-  font-size: 0.7rem !important;
+  font-size: 0.55rem !important;
   font-weight: 800;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1167,8 +1174,9 @@ body {
   }
 
   .hero-subtext {
-    animation: none;
+    transition: none;
     opacity: 1;
+    transform: none;
   }
 }
 
