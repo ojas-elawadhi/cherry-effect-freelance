@@ -14,7 +14,7 @@ export default function SiteNavigation() {
           link: item.href,
           icon: null,
         }))}
-        ctaLabel="Contact"
+        ctaLabel="Contact Us"
         ctaHref="#contact"
       />
     </>
