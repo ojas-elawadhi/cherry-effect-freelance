@@ -1,5 +1,30 @@
 import { packages } from "./data";
 import SectionReveal from "./section-reveal";
+import { CardSpotlight } from "@/components/ui/card-spotlight";
+
+const spotlightThemes = {
+  pink: {
+    color: "#1a0410",
+    canvasColors: [
+      [255, 0, 149],
+      [255, 79, 127],
+    ],
+  },
+  yellow: {
+    color: "#1a1605",
+    canvasColors: [
+      [245, 230, 168],
+      [240, 200, 120],
+    ],
+  },
+  green: {
+    color: "#04150d",
+    canvasColors: [
+      [0, 168, 107],
+      [88, 200, 150],
+    ],
+  },
+};
 
 export default function ServicesSection() {
   return (
@@ -15,14 +40,19 @@ export default function ServicesSection() {
         </SectionReveal>
 
         <div className="grid gap-8 xl:grid-cols-3 xl:gap-0">
-          {packages.map((pack, index) => (
+          {packages.map((pack, index) => {
+            const theme = spotlightThemes[pack.accent] ?? spotlightThemes.pink;
+            return (
             <SectionReveal key={pack.name} delay={index * 120}>
-              <article
+              <CardSpotlight
+                color={theme.color}
+                canvasColors={theme.canvasColors}
+                radius={420}
                 className={`package-card package-card--${pack.accent} ${
                   pack.featured ? "package-card--featured" : ""
                 } ${index === 1 ? "xl:-mx-4 xl:translate-y-6" : ""}`}
               >
-                <div className="space-y-6">
+                <div className="relative z-10 space-y-6">
                   <div className="flex items-start justify-between gap-4">
                     <div className="space-y-3">
                       <p className="text-xs font-semibold uppercase tracking-[0.35em] text-foreground/58">
@@ -67,9 +97,10 @@ export default function ServicesSection() {
                     </p>
                   </div>
                 </div>
-              </article>
+              </CardSpotlight>
             </SectionReveal>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>
