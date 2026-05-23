@@ -194,21 +194,69 @@ export const proofItems = [
 export const testimonialItems = [
   {
     quote:
-      "Finally made sense of our brand. Everything felt clearer after that.",
-    name: "Founder, Luma Skincare",
-    title: "Positioning and messaging reset",
+      "TCE Marketing built our brand identity from scratch — logo, brand image, and a full marketing strategy that drove business growth and positioned us confidently on the road to IPO readiness.",
+    name: "GCM Chattisgarh",
+    title: "Industrial Logistics – Coal & Fly Ash, India",
   },
   {
     quote:
-      "Ads actually started working because the offer and the landing flow finally matched.",
-    name: "Northline Kitchens",
-    title: "Creative and acquisition systems",
+      "TCE Marketing gave our spice brand a distinct identity and a clear market direction that helped us reach the right buyers and grow with purpose.",
+    name: "Pitambra Daruveda",
+    title: "Spices – India",
   },
   {
     quote:
-      "We stopped wasting money and started seeing where growth was actually coming from.",
-    name: "Vera Clinics",
-    title: "Funnel structure and scale direction",
+      "TCE Marketing understood the complexity of our industry and delivered a focused B2B marketing strategy that brought us visibility, credibility, and measurable business growth.",
+    name: "AOD Chemical",
+    title: "Chemical Manufacturer – Delhi, India",
+  },
+  {
+    quote:
+      "TCE Marketing helped us define our brand voice and build a communication strategy that connected with students and institutions across borders with clarity and confidence.",
+    name: "KTC Group",
+    title: "Education – Tokyo, Japan",
+  },
+  {
+    quote:
+      "TCE Marketing brought the strategic precision and creative refinement that a five-star property demands — elevating our brand presence exactly where it mattered most.",
+    name: "Taj 51 Buckingham Gate",
+    title: "Luxury Hotel – London, UK",
+  },
+  {
+    quote:
+      "TCE Marketing sharpened our trade positioning and gave us the marketing direction needed to expand our dealer network and grow our presence in a highly competitive market.",
+    name: "Servis",
+    title: "Truck & Automotive Spare Parts – Delhi, India",
+  },
+  {
+    quote:
+      "TCE Marketing transformed our fitness centre into a recognisable local brand — the strategy, the look, and the outreach all came together to deliver real membership growth.",
+    name: "T&T Gym",
+    title: "Fitness – Chh. Sambhajinagar, India",
+  },
+  {
+    quote:
+      "TCE Marketing brought sharp, structured thinking to our regional marketing efforts and helped us align strategy with business goals across the India market.",
+    name: "HCL Tech",
+    title: "Technology – Singapore",
+  },
+  {
+    quote:
+      "TCE Marketing's deep understanding of mass-market consumer behaviour helped us sharpen our brand recall and strengthen our reach across highly competitive retail territories.",
+    name: "Vimal Pan Masala",
+    title: "Tobacco & Pan Masala – Kolkata, India",
+  },
+  {
+    quote:
+      "TCE Marketing captured everything that the Harley-Davidson spirit stands for and translated it into campaigns that genuinely resonated with the Indian riding community.",
+    name: "Harley-Davidson",
+    title: "Motorcycles – Mumbai, India",
+  },
+  {
+    quote:
+      "TCE Marketing gave our projects the premium positioning they deserved and helped us build lasting trust with the right homebuyers at every stage of the journey.",
+    name: "Raheja Universal",
+    title: "Real Estate Developer – Mumbai, India",
   },
 ];
 
