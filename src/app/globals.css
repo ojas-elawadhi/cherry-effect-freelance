@@ -456,15 +456,17 @@ body {
 
 .hero-subtext {
   opacity: 0;
-  transform: translateY(28px) scale(0.98);
-  transition:
-    opacity 860ms ease,
-    transform 860ms ease;
+  transform: translateY(52px) scale(0.82);
+  transform-origin: 50% 100%;
+  letter-spacing: 0.04em;
+  text-shadow:
+    0 0 0 rgba(255, 0, 149, 0),
+    0 0 0 rgba(245, 230, 168, 0);
+  will-change: opacity, transform, letter-spacing, text-shadow;
 }
 
-.hero-subtext.is-visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+.hero-subtext.is-revealed {
+  animation: heroSubtextReveal 760ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .noise-overlay {
@@ -1062,6 +1064,44 @@ body {
 
   to {
     opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes heroSubtextReveal {
+  0% {
+    opacity: 0;
+    letter-spacing: 0.08em;
+    text-shadow:
+      0 0 0 rgba(255, 0, 149, 0),
+      0 0 0 rgba(245, 230, 168, 0);
+    transform: translateY(52px) scale(0.82);
+  }
+
+  38% {
+    opacity: 0.8;
+    letter-spacing: 0.05em;
+    text-shadow:
+      0 0 18px rgba(255, 0, 149, 0.26),
+      0 0 32px rgba(245, 230, 168, 0.16);
+    transform: translateY(8px) scale(0.94);
+  }
+
+  68% {
+    opacity: 1;
+    letter-spacing: 0.01em;
+    text-shadow:
+      0 0 20px rgba(255, 0, 149, 0.3),
+      0 0 42px rgba(245, 230, 168, 0.18);
+    transform: translateY(-7px) scale(1.08);
+  }
+
+  100% {
+    opacity: 1;
+    letter-spacing: 0;
+    text-shadow:
+      0 0 12px rgba(255, 0, 149, 0.18),
+      0 0 28px rgba(245, 230, 168, 0.12);
     transform: translateY(0) scale(1);
   }
 }
