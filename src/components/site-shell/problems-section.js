@@ -3,20 +3,11 @@ import ScrollStackCards from "./scroll-stack-cards";
 
 export default function ProblemsSection() {
   return (
-    <section className="px-4 py-24 sm:px-6 lg:px-10">
-      <div className="mx-auto max-w-6xl space-y-14">
-        <SectionReveal className="space-y-4 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.42em] text-primary">
-            What We Fix
-          </p>
-          <h2 className="text-4xl font-black uppercase leading-none tracking-[-0.06em] text-foreground sm:text-6xl">
-            What we fix.
-          </h2>
-        </SectionReveal>
-
+    <section className="px-4 pb-24 pt-12 sm:px-6 lg:px-10">
+      <div className="mx-auto max-w-6xl">
         <ScrollStackCards />
 
-        <SectionReveal className="text-center">
+        <SectionReveal className="pt-14 text-center">
           <p className="text-3xl font-black tracking-[-0.05em] text-primary sm:text-7xl">
             We fix the full picture.
           </p>

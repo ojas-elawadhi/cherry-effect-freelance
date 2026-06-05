@@ -15,10 +15,22 @@ export default function ScrollStackCards() {
       itemDistance={90}
       itemScale={0.04}
       itemStackDistance={36}
-      stackPosition="18%"
-      scaleEndPosition="10%"
+      stackPosition="32%"
+      scaleEndPosition="22%"
+      entryOffset="68%"
       baseScale={0.9}
       className="w-full"
+      headerClassName="bg-background pb-8 pt-[8vh] text-center"
+      header={
+        <div className="mx-auto max-w-6xl space-y-4 px-4 sm:px-6 lg:px-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.42em] text-primary">
+            What We Fix
+          </p>
+          <h2 className="text-4xl font-black uppercase leading-none tracking-[-0.06em] text-foreground sm:text-6xl">
+            What we fix.
+          </h2>
+        </div>
+      }
     >
       {problemCards.map((card, index) => (
         <ScrollStackItem

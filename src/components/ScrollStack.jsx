@@ -29,6 +29,9 @@ const ScrollStack = ({
   rotationAmount = 0,
   blurAmount = 0,
   useWindowScroll = false,
+  header = null,
+  headerClassName = '',
+  entryOffset = '0%',
   onStackComplete
 }) => {
   const childItems = Children.toArray(children);
@@ -378,10 +381,13 @@ const ScrollStack = ({
       if (!inner || !stage) return;
 
       const stackPositionPx = parsePercentage(stackPosition, window.innerHeight);
+      const entryOffsetPx = parsePercentage(entryOffset, window.innerHeight);
       const cardHeights = cards.map(card => card.offsetHeight);
       const baseTops = [];
       const targetTops = [];
-      let runningTop = stackPositionPx;
+      // Start the first card `entryOffsetPx` below its pinned position so the
+      // header pins first and the cards only travel into view as scroll continues.
+      let runningTop = stackPositionPx + entryOffsetPx;
 
       cardHeights.forEach((cardHeight, index) => {
         baseTops.push(runningTop);
@@ -465,6 +471,7 @@ const ScrollStack = ({
     rotationAmount,
     blurAmount,
     useWindowScroll,
+    entryOffset,
     onStackComplete,
     handleScroll,
     getElementOffset,
@@ -497,6 +504,12 @@ const ScrollStack = ({
       <div className={containerClassName} ref={scrollerRef} style={containerStyles}>
         <div className="scroll-stack-inner relative w-full" ref={innerRef}>
           <div className="scroll-stack-stage sticky top-0 h-screen px-20" ref={stageRef}>
+            {header ? (
+              <div
+                className={`scroll-stack-header pointer-events-none absolute inset-x-0 top-0 z-[60] ${headerClassName}`.trim()}>
+                {header}
+              </div>
+            ) : null}
             <div className="relative h-full w-full">
               {childItems}
             </div>
