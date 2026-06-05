@@ -30,6 +30,12 @@ export default function ScrollStackCards() {
         baseScale={0.9}
         className="relative z-[1] w-full"
         onActiveIndexChange={setActiveIndex}
+        outroClassName="px-6 text-center"
+        outro={
+          <p className="max-w-4xl text-4xl font-black tracking-[-0.05em] text-white sm:text-7xl">
+            We fix the <span className="text-primary">full</span> picture.
+          </p>
+        }
         headerClassName="pb-16 pt-[8vh] text-center"
         header={
           <div className="mx-auto max-w-6xl space-y-5 px-4 sm:px-6 lg:px-10">

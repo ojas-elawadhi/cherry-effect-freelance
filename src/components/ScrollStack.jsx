@@ -34,6 +34,8 @@ const ScrollStack = ({
   entryOffset = '0%',
   entranceScale = 1,
   peakPosition = 0.5,
+  outro = null,
+  outroClassName = '',
   onActiveIndexChange,
   onStackComplete
 }) => {
@@ -41,8 +43,11 @@ const ScrollStack = ({
   const scrollerRef = useRef(null);
   const innerRef = useRef(null);
   const stageRef = useRef(null);
+  const cardsWrapperRef = useRef(null);
+  const outroRef = useRef(null);
   const stackCompletedRef = useRef(false);
   const activeIndexRef = useRef(-1);
+  const lastOutroProgressRef = useRef(-1);
   const lenisAnimationFrameRef = useRef(null);
   const scrollFrameRef = useRef(null);
   const lenisRef = useRef(null);
@@ -108,8 +113,31 @@ const ScrollStack = ({
     const scaleEndPositionPx = parsePercentage(scaleEndPosition, containerHeight);
 
     if (useWindowScroll) {
-      const { baseTops, cardHeights, targetTops, innerTop } = windowLayoutRef.current;
+      const { baseTops, cardHeights, targetTops, innerTop, outroStart, outroEnd } = windowLayoutRef.current;
       const localScroll = Math.max(0, scrollTop - innerTop);
+
+      // Outro transition: SEQUENTIAL, never overlapping. The stack fully fades
+      // out first, then (after a small gap) the centered outro fades in. There
+      // is no progress range where both are partially visible.
+      if (outro && outroRef.current && outroEnd > outroStart) {
+        const outroProgress = Math.min(1, Math.max(0, (localScroll - outroStart) / (outroEnd - outroStart)));
+        if (Math.abs(outroProgress - lastOutroProgressRef.current) > 0.005) {
+          lastOutroProgressRef.current = outroProgress;
+          // Phase 1 (0 -> 0.40): stack fades fully out.
+          const stackOut = Math.min(1, outroProgress / 0.4);
+          const stackOpacity = 1 - stackOut;
+          // Gap (0.40 -> 0.48): both hidden.
+          // Phase 2 (0.48 -> 1): outro fades in. Only after the stack is gone.
+          const outroOpacity = Math.min(1, Math.max(0, (outroProgress - 0.48) / 0.52));
+          if (cardsWrapperRef.current) {
+            cardsWrapperRef.current.style.opacity = `${stackOpacity}`;
+            cardsWrapperRef.current.style.pointerEvents = stackOpacity < 0.05 ? 'none' : '';
+          }
+          outroRef.current.style.opacity = `${outroOpacity}`;
+          outroRef.current.style.transform = `translateY(${(1 - outroOpacity) * 24}px)`;
+          outroRef.current.style.pointerEvents = outroOpacity > 0.05 ? '' : 'none';
+        }
+      }
 
       cardsRef.current.forEach((card, i) => {
         if (!card) return;
@@ -320,6 +348,7 @@ const ScrollStack = ({
     useWindowScroll,
     entranceScale,
     peakPosition,
+    outro,
     onActiveIndexChange,
     onStackComplete,
     calculateProgress,
@@ -439,16 +468,28 @@ const ScrollStack = ({
       const lastCardHeight = cardHeights.at(-1) ?? 0;
       const totalCardHeight = baseTops.at(-1) ?? stackPositionPx;
       const releaseBuffer = window.innerHeight;
+      // When an outro is present, the last card finishes pinning once
+      // localScroll passes its travel distance. We then hold the completed
+      // stack for `outroDelay` of extra scroll (so the last card visibly
+      // settles and the user scrolls a little) BEFORE the crossfade begins.
+      const lastTravel = Math.max(0, (baseTops.at(-1) ?? 0) - (targetTops.at(-1) ?? 0));
+      const outroDelay = outro ? window.innerHeight * 0.7 : 0;
+      const outroStart = lastTravel + outroDelay;
+      const outroEnd = outroStart + releaseBuffer * 0.6;
 
       windowLayoutRef.current = {
         baseTops,
         cardHeights,
         targetTops,
-        innerTop: getElementOffset(inner)
+        innerTop: getElementOffset(inner),
+        outroStart,
+        outroEnd
       };
 
       stage.style.height = '100vh';
-      inner.style.height = `${totalCardHeight + lastCardHeight + releaseBuffer}px`;
+      // Add the dwell delay to the scroll length so the hold has real room
+      // and doesn't compress the existing release buffer.
+      inner.style.height = `${totalCardHeight + lastCardHeight + releaseBuffer + outroDelay}px`;
     }
 
     const resizeObserver = new ResizeObserver(() => {
@@ -495,6 +536,7 @@ const ScrollStack = ({
       }
       stackCompletedRef.current = false;
       activeIndexRef.current = -1;
+      lastOutroProgressRef.current = -1;
       cardsRef.current = [];
       transformsCache.clear();
       isUpdatingRef.current = false;
@@ -514,6 +556,7 @@ const ScrollStack = ({
     blurAmount,
     useWindowScroll,
     entryOffset,
+    outro,
     onStackComplete,
     handleScroll,
     getElementOffset,
@@ -546,15 +589,31 @@ const ScrollStack = ({
       <div className={containerClassName} ref={scrollerRef} style={containerStyles}>
         <div className="scroll-stack-inner relative w-full" ref={innerRef}>
           <div className="scroll-stack-stage sticky top-0 h-screen px-20" ref={stageRef}>
-            {header ? (
+            <div
+              className="scroll-stack-fade relative h-full w-full"
+              ref={cardsWrapperRef}
+              style={{ transition: 'opacity 220ms ease-out' }}>
+              {header ? (
+                <div
+                  className={`scroll-stack-header pointer-events-none absolute inset-x-0 top-0 z-[60] ${headerClassName}`.trim()}>
+                  {header}
+                </div>
+              ) : null}
+              <div className="relative h-full w-full">
+                {childItems}
+              </div>
+            </div>
+            {outro ? (
               <div
-                className={`scroll-stack-header pointer-events-none absolute inset-x-0 top-0 z-[60] ${headerClassName}`.trim()}>
-                {header}
+                className={`scroll-stack-outro pointer-events-none absolute inset-0 z-[70] flex items-center justify-center opacity-0 ${outroClassName}`.trim()}
+                ref={outroRef}
+                style={{
+                  willChange: 'opacity, transform',
+                  transition: 'opacity 320ms ease-out, transform 320ms ease-out'
+                }}>
+                {outro}
               </div>
             ) : null}
-            <div className="relative h-full w-full">
-              {childItems}
-            </div>
           </div>
           <div className="scroll-stack-end absolute bottom-0 left-0 h-px w-full" />
         </div>
