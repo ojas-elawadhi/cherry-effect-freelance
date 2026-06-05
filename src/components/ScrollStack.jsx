@@ -32,6 +32,9 @@ const ScrollStack = ({
   header = null,
   headerClassName = '',
   entryOffset = '0%',
+  entranceScale = 1,
+  peakPosition = 0.5,
+  onActiveIndexChange,
   onStackComplete
 }) => {
   const childItems = Children.toArray(children);
@@ -39,6 +42,7 @@ const ScrollStack = ({
   const innerRef = useRef(null);
   const stageRef = useRef(null);
   const stackCompletedRef = useRef(false);
+  const activeIndexRef = useRef(-1);
   const lenisAnimationFrameRef = useRef(null);
   const scrollFrameRef = useRef(null);
   const lenisRef = useRef(null);
@@ -122,7 +126,24 @@ const ScrollStack = ({
           ? Math.min(1, Math.max(0, (baseTop - currentTop) / travelDistance))
           : 1;
         const targetScale = baseScale + i * itemScale;
-        const scale = 1 - scaleProgress * (1 - targetScale);
+        let scale;
+        if (entranceScale > 1) {
+          // Two-phase scale: grow from 1 -> entranceScale across most of the
+          // travel (up to peakPosition), then shrink entranceScale -> targetScale
+          // over the short final stretch. The shrink is eased (accelerating) so
+          // the card snaps down quickly as it pins for a punchy, impactful feel.
+          const peak = Math.min(0.999, Math.max(0.001, peakPosition));
+          if (scaleProgress <= peak) {
+            const t = scaleProgress / peak;
+            scale = 1 + t * (entranceScale - 1);
+          } else {
+            const t = (scaleProgress - peak) / (1 - peak);
+            const eased = t * t; // ease-in: slow then fast shrink
+            scale = entranceScale - eased * (entranceScale - targetScale);
+          }
+        } else {
+          scale = 1 - scaleProgress * (1 - targetScale);
+        }
         const rotation = rotationAmount ? i * rotationAmount * scaleProgress : 0;
 
         let blur = 0;
@@ -159,6 +180,23 @@ const ScrollStack = ({
           lastTransformsRef.current.set(i, newTransform);
         }
       });
+
+      if (onActiveIndexChange) {
+        let activeIndex = -1;
+        cardsRef.current.forEach((_, index) => {
+          const cardCurrentTop = Math.max(
+            (baseTops[index] ?? 0) - localScroll,
+            targetTops[index] ?? 0
+          );
+          if (cardCurrentTop <= (targetTops[index] ?? 0) + 0.5) {
+            activeIndex = index;
+          }
+        });
+        if (activeIndex !== activeIndexRef.current) {
+          activeIndexRef.current = activeIndex;
+          onActiveIndexChange(activeIndex);
+        }
+      }
 
       const lastIndex = cardsRef.current.length - 1;
       if (lastIndex >= 0) {
@@ -280,6 +318,9 @@ const ScrollStack = ({
     rotationAmount,
     blurAmount,
     useWindowScroll,
+    entranceScale,
+    peakPosition,
+    onActiveIndexChange,
     onStackComplete,
     calculateProgress,
     parsePercentage,
@@ -453,6 +494,7 @@ const ScrollStack = ({
         window.removeEventListener('load', handleScroll);
       }
       stackCompletedRef.current = false;
+      activeIndexRef.current = -1;
       cardsRef.current = [];
       transformsCache.clear();
       isUpdatingRef.current = false;
