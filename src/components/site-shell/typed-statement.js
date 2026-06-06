@@ -10,6 +10,12 @@ const SCROLL_SPAN_VH = 1;
 // the `top-24` class on the sticky wrapper (24 * 0.25rem = 6rem = 96px).
 const PIN_OFFSET = 96;
 
+// Extra scroll distance (in viewport heights) held AFTER typing finishes,
+// before the container releases and the next section is allowed to scroll in.
+// This keeps the pinned panel covering the screen until the statement has
+// fully typed out, so "What We Fix" can't peek in below the fold mid-typing.
+const TAIL_SPAN_VH = 0.7;
+
 export default function TypedStatement({ lines, heading }) {
   const sectionRef = useRef(null);
   const stickyRef = useRef(null);
@@ -41,9 +47,12 @@ export default function TypedStatement({ lines, heading }) {
       // pinned until every line has finished typing — only then can the next
       // section scroll into view.
       const span = viewportHeight * SCROLL_SPAN_VH;
+      // Held after typing completes so the panel stays pinned and covers the
+      // screen until the next section is a full viewport below the fold.
+      const tail = viewportHeight * TAIL_SPAN_VH;
 
-      // Keep the container tall enough = panel height + the typing span.
-      const nextHeight = sticky.offsetHeight + span;
+      // Keep the container tall enough = panel height + typing span + tail hold.
+      const nextHeight = sticky.offsetHeight + span + tail;
       setContainerHeight((current) =>
         current === nextHeight ? current : nextHeight,
       );
@@ -113,7 +122,7 @@ export default function TypedStatement({ lines, heading }) {
       style={
         containerHeight
           ? { height: `${containerHeight}px` }
-          : { minHeight: `${100 + SCROLL_SPAN_VH * 100}vh` }
+          : { minHeight: `${100 + (SCROLL_SPAN_VH + TAIL_SPAN_VH) * 100}vh` }
       }
     >
       <div ref={stickyRef} className="sticky top-24">
