@@ -744,21 +744,37 @@ body {
 .scroll-stack-door__inner {
   position: absolute;
   top: 0;
-  width: 100vw;
+  /* As wide as the WHOLE doors row (each door is 50% of that row, so 200% of a
+     door). Anchored to the door edge (left:0 / right:0) and centered, the two
+     halves line up as one seamless headline — the seam falls at the true center
+     of the doors container, not the viewport, so no letter is clipped. */
+  width: 200%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   will-change: opacity, transform;
+  /* The reveal is a binary flip in JS (hidden -> shown the instant the cards
+     finish fading); this transition turns that flip into a smooth fade + slow
+     upward rise that is self-contained and NOT tied to scroll position, so
+     scrubbing the scroll never catches the headline at a partial-fade state. */
+  transition: opacity 520ms ease-out, transform 720ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .scroll-stack-door--left .scroll-stack-door__inner {
   left: 0;
 }
 
+/* Both inners are 200% wide and BOTH anchored from the left edge of their own
+   door. The right door starts exactly one door-width into the row, so shifting
+   its inner left by 100% (one door-width) makes it begin at the same row-left
+   origin as the left door's inner. The two 200% boxes then occupy the IDENTICAL
+   region — pixel for pixel — so the centered headline lines up seamlessly and no
+   letter on the seam (the "f" in "full") is clipped, regardless of how the
+   doors' 50% widths round on odd-pixel containers. */
 .scroll-stack-door--right .scroll-stack-door__inner {
-  right: 0;
+  left: -100%;
 }
 
 /* ---- What We Fix: stacking cards ---- */

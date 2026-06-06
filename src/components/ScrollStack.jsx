@@ -51,6 +51,11 @@ const ScrollStack = ({
   const stackCompletedRef = useRef(false);
   const activeIndexRef = useRef(-1);
   const lastOutroProgressRef = useRef(-1);
+  // One-way latch: flips true the first time the user scrolls past the settled
+  // stack, and never flips back. This makes the cards-fade + headline-in a
+  // SINGLE scroll trigger that plays itself (via CSS transitions) rather than a
+  // scrubbable, scroll-position-mapped fade.
+  const revealLatchedRef = useRef(false);
   const lenisAnimationFrameRef = useRef(null);
   const scrollFrameRef = useRef(null);
   const lenisRef = useRef(null);
@@ -126,12 +131,22 @@ const ScrollStack = ({
         if (Math.abs(outroProgress - lastOutroProgressRef.current) > 0.004) {
           lastOutroProgressRef.current = outroProgress;
 
-          // Phase 1 (0 -> 0.28): cards fade fully out.
-          const stackOpacity = 1 - Math.min(1, outroProgress / 0.28);
+          // SINGLE SCROLL TRIGGER: the first scroll past the settled stack
+          // latches the reveal on, and it never un-latches. Both the card fade
+          // and the headline reveal are binary (0/1) and animated by CSS
+          // transitions — so it plays itself as one self-contained move and is
+          // NOT scrubbable by dragging the scroll back and forth.
+          if (outroProgress > 0.02) {
+            revealLatchedRef.current = true;
+          }
+          const revealed = revealLatchedRef.current;
 
-          // Phase 2 (0.30 -> 0.50): headline text fades + rises in.
-          const textIn = Math.min(1, Math.max(0, (outroProgress - 0.3) / 0.2));
-          const textEased = 1 - Math.pow(1 - textIn, 3);
+          // Phase 1: cards fade fully out (CSS-transitioned, see fix-stack fade).
+          const stackOpacity = revealed ? 0 : 1;
+
+          // Phase 2: headline fades + rises in (CSS-transitioned door inner).
+          const shown = revealed;
+          const textEased = shown ? 1 : 0;
 
           // Phase 3 (0.62 -> 1.0): doors split apart.
           const partRaw = Math.min(1, Math.max(0, (outroProgress - 0.62) / 0.38));
@@ -145,7 +160,7 @@ const ScrollStack = ({
             cardsWrapperRef.current.style.pointerEvents = stackOpacity < 0.05 ? 'none' : '';
           }
 
-          const rise = (1 - textEased) * 36;
+          const rise = (1 - textEased) * 64;
           if (outroLeftRef.current) {
             outroLeftRef.current.style.transform = `translate3d(-${offset}%, 0, 0)`;
             const t = outroLeftRef.current.querySelector('.scroll-stack-door__inner');
@@ -165,7 +180,7 @@ const ScrollStack = ({
 
           // Doors are inert until the headline starts showing; fully gone when open.
           outroRef.current.style.pointerEvents = 'none';
-          outroRef.current.style.visibility = textIn > 0 ? 'visible' : 'hidden';
+          outroRef.current.style.visibility = shown ? 'visible' : 'hidden';
         }
       }
 
@@ -576,6 +591,7 @@ const ScrollStack = ({
       stackCompletedRef.current = false;
       activeIndexRef.current = -1;
       lastOutroProgressRef.current = -1;
+      revealLatchedRef.current = false;
       cardsRef.current = [];
       transformsCache.clear();
       isUpdatingRef.current = false;
@@ -631,7 +647,7 @@ const ScrollStack = ({
             <div
               className="scroll-stack-fade relative z-[40] h-full w-full"
               ref={cardsWrapperRef}
-              style={{ transition: 'opacity 220ms ease-out' }}>
+              style={{ transition: 'opacity 420ms ease-out' }}>
               {header ? (
                 <div
                   className={`scroll-stack-header pointer-events-none absolute inset-x-0 top-0 z-[60] ${headerClassName}`.trim()}>
