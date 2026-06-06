@@ -36,6 +36,7 @@ const ScrollStack = ({
   peakPosition = 0.5,
   outro = null,
   outroClassName = '',
+  behind = null,
   onActiveIndexChange,
   onStackComplete
 }) => {
@@ -45,6 +46,8 @@ const ScrollStack = ({
   const stageRef = useRef(null);
   const cardsWrapperRef = useRef(null);
   const outroRef = useRef(null);
+  const outroLeftRef = useRef(null);
+  const outroRightRef = useRef(null);
   const stackCompletedRef = useRef(false);
   const activeIndexRef = useRef(-1);
   const lastOutroProgressRef = useRef(-1);
@@ -116,26 +119,53 @@ const ScrollStack = ({
       const { baseTops, cardHeights, targetTops, innerTop, outroStart, outroEnd } = windowLayoutRef.current;
       const localScroll = Math.max(0, scrollTop - innerTop);
 
-      // Outro transition: SEQUENTIAL, never overlapping. The stack fully fades
-      // out first, then (after a small gap) the centered outro fades in. There
-      // is no progress range where both are partially visible.
+      // Outro: ONE continuous pinned sequence. Cards fade out -> headline fades
+      // in (doors closed) -> holds -> doors split apart revealing `behind`.
       if (outro && outroRef.current && outroEnd > outroStart) {
         const outroProgress = Math.min(1, Math.max(0, (localScroll - outroStart) / (outroEnd - outroStart)));
-        if (Math.abs(outroProgress - lastOutroProgressRef.current) > 0.005) {
+        if (Math.abs(outroProgress - lastOutroProgressRef.current) > 0.004) {
           lastOutroProgressRef.current = outroProgress;
-          // Phase 1 (0 -> 0.40): stack fades fully out.
-          const stackOut = Math.min(1, outroProgress / 0.4);
-          const stackOpacity = 1 - stackOut;
-          // Gap (0.40 -> 0.48): both hidden.
-          // Phase 2 (0.48 -> 1): outro fades in. Only after the stack is gone.
-          const outroOpacity = Math.min(1, Math.max(0, (outroProgress - 0.48) / 0.52));
+
+          // Phase 1 (0 -> 0.28): cards fade fully out.
+          const stackOpacity = 1 - Math.min(1, outroProgress / 0.28);
+
+          // Phase 2 (0.30 -> 0.50): headline text fades + rises in.
+          const textIn = Math.min(1, Math.max(0, (outroProgress - 0.3) / 0.2));
+          const textEased = 1 - Math.pow(1 - textIn, 3);
+
+          // Phase 3 (0.62 -> 1.0): doors split apart.
+          const partRaw = Math.min(1, Math.max(0, (outroProgress - 0.62) / 0.38));
+          const part = partRaw < 0.5
+            ? 2 * partRaw * partRaw
+            : 1 - Math.pow(-2 * partRaw + 2, 2) / 2;
+          const offset = part * 100; // % of each door's own width
+
           if (cardsWrapperRef.current) {
             cardsWrapperRef.current.style.opacity = `${stackOpacity}`;
             cardsWrapperRef.current.style.pointerEvents = stackOpacity < 0.05 ? 'none' : '';
           }
-          outroRef.current.style.opacity = `${outroOpacity}`;
-          outroRef.current.style.transform = `translateY(${(1 - outroOpacity) * 24}px)`;
-          outroRef.current.style.pointerEvents = outroOpacity > 0.05 ? '' : 'none';
+
+          const rise = (1 - textEased) * 36;
+          if (outroLeftRef.current) {
+            outroLeftRef.current.style.transform = `translate3d(-${offset}%, 0, 0)`;
+            const t = outroLeftRef.current.querySelector('.scroll-stack-door__inner');
+            if (t) {
+              t.style.opacity = `${textEased}`;
+              t.style.transform = `translate3d(0, ${rise}px, 0)`;
+            }
+          }
+          if (outroRightRef.current) {
+            outroRightRef.current.style.transform = `translate3d(${offset}%, 0, 0)`;
+            const t = outroRightRef.current.querySelector('.scroll-stack-door__inner');
+            if (t) {
+              t.style.opacity = `${textEased}`;
+              t.style.transform = `translate3d(0, ${rise}px, 0)`;
+            }
+          }
+
+          // Doors are inert until the headline starts showing; fully gone when open.
+          outroRef.current.style.pointerEvents = 'none';
+          outroRef.current.style.visibility = textIn > 0 ? 'visible' : 'hidden';
         }
       }
 
@@ -473,9 +503,12 @@ const ScrollStack = ({
       // stack for `outroDelay` of extra scroll (so the last card visibly
       // settles and the user scrolls a little) BEFORE the crossfade begins.
       const lastTravel = Math.max(0, (baseTops.at(-1) ?? 0) - (targetTops.at(-1) ?? 0));
-      const outroDelay = outro ? window.innerHeight * 0.7 : 0;
+      const outroDelay = outro ? window.innerHeight * 0.5 : 0;
+      // Outro window holds the full sequence: cards fade -> headline in -> hold
+      // -> doors split. Needs ~2.2 viewports of scroll to feel deliberate.
+      const outroWindow = outro ? window.innerHeight * 2.2 : releaseBuffer * 0.6;
       const outroStart = lastTravel + outroDelay;
-      const outroEnd = outroStart + releaseBuffer * 0.6;
+      const outroEnd = outroStart + outroWindow;
 
       windowLayoutRef.current = {
         baseTops,
@@ -487,9 +520,15 @@ const ScrollStack = ({
       };
 
       stage.style.height = '100vh';
-      // Add the dwell delay to the scroll length so the hold has real room
-      // and doesn't compress the existing release buffer.
-      inner.style.height = `${totalCardHeight + lastCardHeight + releaseBuffer + outroDelay}px`;
+      if (outro) {
+        // Pin the stage exactly until the doors finish splitting. The stage
+        // (100vh) un-pins when localScroll === innerHeight - 100vh; we make that
+        // equal outroEnd so the doors are fully open right as the pin releases
+        // and the revealed section below scrolls up into the opening gap.
+        inner.style.height = `${outroEnd + window.innerHeight}px`;
+      } else {
+        inner.style.height = `${totalCardHeight + lastCardHeight + releaseBuffer}px`;
+      }
     }
 
     const resizeObserver = new ResizeObserver(() => {
@@ -588,9 +627,9 @@ const ScrollStack = ({
     return (
       <div className={containerClassName} ref={scrollerRef} style={containerStyles}>
         <div className="scroll-stack-inner relative w-full" ref={innerRef}>
-          <div className="scroll-stack-stage sticky top-0 h-screen px-20" ref={stageRef}>
+          <div className="scroll-stack-stage sticky top-0 z-[10] h-screen px-20 pointer-events-none" ref={stageRef}>
             <div
-              className="scroll-stack-fade relative h-full w-full"
+              className="scroll-stack-fade relative z-[40] h-full w-full"
               ref={cardsWrapperRef}
               style={{ transition: 'opacity 220ms ease-out' }}>
               {header ? (
@@ -599,24 +638,42 @@ const ScrollStack = ({
                   {header}
                 </div>
               ) : null}
-              <div className="relative h-full w-full">
+              <div className="relative mx-auto h-full w-full max-w-6xl">
                 {childItems}
               </div>
             </div>
+
             {outro ? (
               <div
-                className={`scroll-stack-outro pointer-events-none absolute inset-0 z-[70] flex items-center justify-center opacity-0 ${outroClassName}`.trim()}
-                ref={outroRef}
-                style={{
-                  willChange: 'opacity, transform',
-                  transition: 'opacity 320ms ease-out, transform 320ms ease-out'
-                }}>
-                {outro}
+                className="scroll-stack-doors pointer-events-none absolute inset-0 z-[70] overflow-hidden"
+                ref={outroRef}>
+                <div className="scroll-stack-door scroll-stack-door--left" ref={outroLeftRef}>
+                  <div className={`scroll-stack-door__inner ${outroClassName}`.trim()}>
+                    {outro}
+                  </div>
+                </div>
+                <div className="scroll-stack-door scroll-stack-door--right" ref={outroRightRef}>
+                  <div className={`scroll-stack-door__inner ${outroClassName}`.trim()}>
+                    {outro}
+                  </div>
+                </div>
               </div>
             ) : null}
           </div>
+
           <div className="scroll-stack-end absolute bottom-0 left-0 h-px w-full" />
         </div>
+
+        {/* Revealed section, rendered ONCE. It is pulled up one viewport so it
+            sits in the viewport BEHIND the pinned doors (which are opaque and
+            cover it). As the doors split it is exposed in the widening gap; once
+            the pin releases it is already in place and scrolls on normally — same
+            element throughout, so no duplication and no handoff jump. */}
+        {behind ? (
+          <div className={`scroll-stack-behind relative ${outro ? 'scroll-stack-behind--pulled z-0' : ''}`.trim()}>
+            {behind}
+          </div>
+        ) : null}
       </div>
     );
   }

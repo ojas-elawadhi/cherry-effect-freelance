@@ -24,8 +24,9 @@ export default function SiteShell() {
         <HeroSection />
         <NoiseSection />
         <AboutSection />
-        <ProblemsSection />
-        <ServicesSection />
+        <ProblemsSection>
+          <ServicesSection />
+        </ProblemsSection>
         <ProcessSection />
         <ProofSection />
         <ArticlesSection />

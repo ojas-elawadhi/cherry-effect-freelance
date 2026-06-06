@@ -12,7 +12,7 @@ const toneClasses = {
   green: "fix-card--green bg-brand-green text-[#041f16]",
 };
 
-export default function ScrollStackCards() {
+export default function ScrollStackCards({ behind = null }) {
   const [activeIndex, setActiveIndex] = useState(-1);
 
   return (
@@ -30,6 +30,7 @@ export default function ScrollStackCards() {
         baseScale={0.9}
         className="relative z-[1] w-full"
         onActiveIndexChange={setActiveIndex}
+        behind={behind}
         outroClassName="px-6 text-center"
         outro={
           <p className="max-w-4xl text-4xl font-black tracking-[-0.05em] text-white sm:text-7xl">
