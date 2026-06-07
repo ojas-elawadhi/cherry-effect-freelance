@@ -28,14 +28,14 @@ export default function ProofSection() {
           pauseOnHover
         />
 
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid items-stretch gap-6 md:grid-cols-3">
           {proofItems.map((item, index) => (
-            <SectionReveal key={item} delay={index * 100}>
-              <article className="rounded-[1.75rem] border border-white/8 bg-white/4 p-6 text-center">
+            <SectionReveal key={item} delay={index * 100} className="h-full">
+              <article className="flex h-full flex-col rounded-[1.75rem] border border-white/8 bg-white/4 p-6 text-center">
                 <p className="text-sm font-semibold uppercase tracking-[0.35em] text-foreground/48">
                   Signal {index + 1}
                 </p>
-                <p className="mt-6 text-2xl font-black uppercase leading-snug tracking-[-0.05em] text-foreground">
+                <p className="mt-6 flex flex-1 items-center justify-center text-2xl font-black uppercase leading-snug tracking-[-0.05em] text-foreground">
                   {item}
                 </p>
               </article>
