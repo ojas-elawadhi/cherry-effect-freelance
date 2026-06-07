@@ -2,96 +2,81 @@
 
 import { useEffect, useRef, useState } from "react";
 
-// How much scroll distance (in multiples of the viewport height) is dedicated
-// to typing the whole statement out. Higher = each line takes longer to reveal.
-const SCROLL_SPAN_VH = 1;
+// How fast the whole statement types out, in characters per second. The full
+// box types automatically once it scrolls into view (not driven by scroll).
+const CHARS_PER_SECOND = 55;
 
-// Distance (px) the panel is pinned from the top of the viewport. Must match
-// the `top-24` class on the sticky wrapper (24 * 0.25rem = 6rem = 96px).
-const PIN_OFFSET = 96;
-
-// Extra scroll distance (in viewport heights) held AFTER typing finishes,
-// before the container releases and the next section is allowed to scroll in.
-// This keeps the pinned panel covering the screen until the statement has
-// fully typed out, so "What We Fix" can't peek in below the fold mid-typing.
-const TAIL_SPAN_VH = 0.7;
+// Fraction of the panel that must be visible before typing kicks off.
+const START_THRESHOLD = 0.35;
 
 export default function TypedStatement({ lines, heading }) {
   const sectionRef = useRef(null);
-  const stickyRef = useRef(null);
   const [count, setCount] = useState(0);
   const [hasStarted, setHasStarted] = useState(false);
-  const [containerHeight, setContainerHeight] = useState(null);
 
   const totalLength = lines.reduce(
     (sum, line) => sum + line.text.length + 1,
     0,
   );
 
+  // Start typing once the panel comes into view.
   useEffect(() => {
     const node = sectionRef.current;
-    const sticky = stickyRef.current;
 
-    if (!node || !sticky) {
+    if (!node || hasStarted) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setHasStarted(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: START_THRESHOLD },
+    );
+
+    observer.observe(node);
+
+    return () => observer.disconnect();
+  }, [hasStarted]);
+
+  // Once started, advance the typed character count on a fixed-rate clock.
+  useEffect(() => {
+    if (!hasStarted) {
       return undefined;
     }
 
     let frame = 0;
+    let startTime = null;
 
-    const update = () => {
-      frame = 0;
+    const tick = (now) => {
+      if (startTime === null) {
+        startTime = now;
+      }
 
-      const viewportHeight = window.innerHeight;
-      // Extra scroll distance reserved purely for the typing animation. The
-      // container is this much taller than the panel, so the panel stays
-      // pinned until every line has finished typing — only then can the next
-      // section scroll into view.
-      const span = viewportHeight * SCROLL_SPAN_VH;
-      // Held after typing completes so the panel stays pinned and covers the
-      // screen until the next section is a full viewport below the fold.
-      const tail = viewportHeight * TAIL_SPAN_VH;
-
-      // Keep the container tall enough = panel height + typing span + tail hold.
-      const nextHeight = sticky.offsetHeight + span + tail;
-      setContainerHeight((current) =>
-        current === nextHeight ? current : nextHeight,
+      const elapsedSeconds = (now - startTime) / 1000;
+      const next = Math.min(
+        totalLength,
+        Math.round(elapsedSeconds * CHARS_PER_SECOND),
       );
 
-      // Once the panel reaches its pinned position, the container's top sits
-      // PIN_OFFSET above the viewport top. From there, progress runs 0 -> 1
-      // across `span` of additional scrolling.
-      const rect = node.getBoundingClientRect();
-      const scrolled = PIN_OFFSET - rect.top;
-      const progress = Math.min(1, Math.max(0, scrolled / span));
+      setCount(next);
 
-      setCount(Math.round(progress * totalLength));
-
-      if (progress > 0) {
-        setHasStarted(true);
+      if (next < totalLength) {
+        frame = window.requestAnimationFrame(tick);
       }
     };
 
-    const onScroll = () => {
-      if (frame) {
-        return;
-      }
-
-      frame = window.requestAnimationFrame(update);
-    };
-
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+    frame = window.requestAnimationFrame(tick);
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-
       if (frame) {
         window.cancelAnimationFrame(frame);
       }
     };
-  }, [totalLength]);
+  }, [hasStarted, totalLength]);
 
   const typedLines = lines.reduce(
     (accumulator, line) => {
@@ -116,39 +101,29 @@ export default function TypedStatement({ lines, heading }) {
   ).items;
 
   return (
-    <div
-      ref={sectionRef}
-      className="relative mt-8"
-      style={
-        containerHeight
-          ? { height: `${containerHeight}px` }
-          : { minHeight: `${100 + (SCROLL_SPAN_VH + TAIL_SPAN_VH) * 100}vh` }
-      }
-    >
-      <div ref={stickyRef} className="sticky top-24">
-        {heading ? <div className="mb-8">{heading}</div> : null}
-        <div className="glass-panel w-full p-8 sm:p-10">
-          <div className="space-y-4">
-            {typedLines.map((line) => (
-              <p
-                key={line.text}
-                className={`text-lg leading-8 sm:text-xl sm:leading-9 ${
-                  line.accent === "pink"
-                    ? "text-primary"
-                    : line.accent === "yellow"
-                      ? "text-foreground"
-                      : "text-foreground"
-                }`}
-              >
-                {line.content}
-                {hasStarted &&
-                line.visibleChars > 0 &&
-                line.visibleChars < line.text.length ? (
-                  <span className="type-cursor" />
-                ) : null}
-              </p>
-            ))}
-          </div>
+    <div ref={sectionRef} className="relative mt-8">
+      {heading ? <div className="mb-8">{heading}</div> : null}
+      <div className="glass-panel w-full p-8 sm:p-10">
+        <div className="space-y-4">
+          {typedLines.map((line) => (
+            <p
+              key={line.text}
+              className={`text-lg leading-8 sm:text-xl sm:leading-9 ${
+                line.accent === "pink"
+                  ? "text-primary"
+                  : line.accent === "yellow"
+                    ? "text-foreground"
+                    : "text-foreground"
+              }`}
+            >
+              {line.content}
+              {hasStarted &&
+              line.visibleChars > 0 &&
+              line.visibleChars < line.text.length ? (
+                <span className="type-cursor" />
+              ) : null}
+            </p>
+          ))}
         </div>
       </div>
     </div>
