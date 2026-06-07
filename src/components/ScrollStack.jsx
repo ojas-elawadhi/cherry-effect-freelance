@@ -148,8 +148,10 @@ const ScrollStack = ({
           const shown = revealed;
           const textEased = shown ? 1 : 0;
 
-          // Phase 3 (0.62 -> 1.0): doors split apart.
-          const partRaw = Math.min(1, Math.max(0, (outroProgress - 0.62) / 0.38));
+          // Phase 3 (0.4 -> 1.0): doors split apart. Started earlier so the
+          // split begins shortly after the headline shows rather than after a
+          // long hold.
+          const partRaw = Math.min(1, Math.max(0, (outroProgress - 0.4) / 0.6));
           const part = partRaw < 0.5
             ? 2 * partRaw * partRaw
             : 1 - Math.pow(-2 * partRaw + 2, 2) / 2;
@@ -518,10 +520,11 @@ const ScrollStack = ({
       // stack for `outroDelay` of extra scroll (so the last card visibly
       // settles and the user scrolls a little) BEFORE the crossfade begins.
       const lastTravel = Math.max(0, (baseTops.at(-1) ?? 0) - (targetTops.at(-1) ?? 0));
-      const outroDelay = outro ? window.innerHeight * 0.5 : 0;
+      const outroDelay = outro ? window.innerHeight * 0.15 : 0;
       // Outro window holds the full sequence: cards fade -> headline in -> hold
-      // -> doors split. Needs ~2.2 viewports of scroll to feel deliberate.
-      const outroWindow = outro ? window.innerHeight * 2.2 : releaseBuffer * 0.6;
+      // -> doors split. Kept tight (~1.2 viewports) so the split kicks in soon
+      // after the stack settles instead of requiring a long scroll.
+      const outroWindow = outro ? window.innerHeight * 1.2 : releaseBuffer * 0.6;
       const outroStart = lastTravel + outroDelay;
       const outroEnd = outroStart + outroWindow;
 
