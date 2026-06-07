@@ -45,11 +45,11 @@ export default function SiteFooter() {
             className="inline-flex items-center text-foreground transition hover:text-primary"
           >
             <Image
-              src="/TCELogo.png"
+              src="/TCELogo-nobgwhite.png"
               alt="The Cherry Effect logo"
               width={420}
               height={156}
-              className="h-auto w-[16rem] shrink-0 sm:w-[20rem] lg:w-[26rem]"
+              className="h-auto w-[16rem] shrink-0 sm:w-[20rem] lg:w-[18rem]"
             />
           </Link>
           <p className="max-w-2xl text-4xl font-black uppercase leading-none tracking-[-0.06em] text-foreground sm:text-5xl lg:text-7xl">

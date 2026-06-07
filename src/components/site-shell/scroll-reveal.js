@@ -9,17 +9,6 @@ import {
   useTransform,
 } from "motion/react";
 
-// Glyphs the "decode" effect cycles through before a character locks in.
-// Mono-ish noise that matches the brand's terminal/static vibe.
-const SCRAMBLE_GLYPHS = "!<>-_\\/[]{}—=+*^?#%$&▓▒░█01";
-
-function pickGlyph(seed) {
-  // Deterministic-ish pseudo glyph so we never call Math.random (SSR-safe-ish
-  // and avoids hydration thrash). Seed is composed from indices + a tick.
-  const i = Math.abs(Math.floor(seed)) % SCRAMBLE_GLYPHS.length;
-  return SCRAMBLE_GLYPHS[i];
-}
-
 // Maps a line's signed distance-from-focus (in line units) to depth/position.
 // The active line sits forward and sharp; neighbours recede into 3D space.
 function getLineMetrics(distance) {
@@ -49,10 +38,10 @@ function getLineMetrics(distance) {
 // How long a character scrambles once its line arrives, in milliseconds.
 const DECODE_MS = 400;
 
-// A single character that decodes from scrambled glyphs into its real letter.
-// The scramble is TIME-based, not scroll-based: when the line enters focus the
-// character runs a fixed ~1s decode, then locks. When the line leaves focus it
-// re-arms so the next approach scrambles again (scroll up or down).
+// A single character that fades in (no glyph scramble) once its line arrives.
+// The fade is TIME-based, not scroll-based: when the line enters focus the
+// character runs a fixed fade-up, then locks. When the line leaves focus it
+// re-arms so the next approach fades again (scroll up or down).
 function DecodeChar({ char, charFocus, delay, clean }) {
   const ref = useRef(null);
 
@@ -64,7 +53,6 @@ function DecodeChar({ char, charFocus, delay, clean }) {
       return;
     }
 
-    let frame = 0;
     let raf = 0;
     let startTime = null; // when this char's decode clock began (ms)
 
@@ -92,19 +80,15 @@ function DecodeChar({ char, charFocus, delay, clean }) {
       if (startTime === null) startTime = now;
       const elapsed = now - startTime - delay;
 
+      // No scramble: always show the real character. Keep the same timed fade
+      // (staggered start → fade up over the decode window → fully opaque) so the
+      // chromatic split / depth reveal still reads, just without glyph noise.
+      node.textContent = char;
       if (elapsed >= DECODE_MS) {
-        // Decode finished: lock the real character.
-        node.textContent = char;
         node.style.opacity = "1";
       } else if (elapsed < 0) {
-        // Staggered start not reached yet: show a faint scrambling glyph.
-        frame += 1;
-        if (frame % 3 === 0) node.textContent = pickGlyph(frame * 7 + char.charCodeAt(0) * 13);
         node.style.opacity = "0.45";
       } else {
-        // Actively decoding: flicker glyphs, fade up over the ~1s window.
-        frame += 1;
-        if (frame % 3 === 0) node.textContent = pickGlyph(frame * 7 + char.charCodeAt(0) * 13);
         node.style.opacity = String(0.45 + (elapsed / DECODE_MS) * 0.55);
       }
 
