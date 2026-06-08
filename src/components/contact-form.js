@@ -1,25 +1,18 @@
 "use client";
 
-import { useActionState } from "react";
-import { useFormStatus } from "react-dom";
-import { submitAssessment } from "@/app/actions";
+import { useState } from "react";
+import emailjs from "@emailjs/browser";
 
-const initialState = {
-  status: "idle",
-  message: "",
-  fields: {
-    name: "",
-    designation: "",
-    company: "",
-    phone: "",
-    email: "",
-    comments: "",
-  },
-};
+const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
+const TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
+const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
 
-function SubmitButton() {
-  const { pending } = useFormStatus();
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+const idleMessage =
+  "Tell us where the friction is. We will take a proper look and come back with clear next steps.";
+
+function SubmitButton({ pending }) {
   return (
     <button
       type="submit"
@@ -31,7 +24,7 @@ function SubmitButton() {
   );
 }
 
-function Field({ label, name, type = "text", rows, defaultValue, required = true }) {
+function Field({ label, name, type = "text", rows, required = true }) {
   const baseClassName =
     "w-full rounded-[1.35rem] border border-white/10 bg-white/5 px-4 py-4 text-sm text-foreground outline-none transition placeholder:text-foreground/32 focus:border-brand-green focus:bg-white/8";
 
@@ -42,7 +35,6 @@ function Field({ label, name, type = "text", rows, defaultValue, required = true
         <textarea
           name={name}
           rows={rows}
-          defaultValue={defaultValue}
           required={required}
           className={`${baseClassName} resize-y`}
         />
@@ -50,7 +42,6 @@ function Field({ label, name, type = "text", rows, defaultValue, required = true
         <input
           type={type}
           name={name}
-          defaultValue={defaultValue}
           required={required}
           className={baseClassName}
         />
@@ -60,48 +51,88 @@ function Field({ label, name, type = "text", rows, defaultValue, required = true
 }
 
 export default function ContactForm() {
-  const [state, formAction] = useActionState(submitAssessment, initialState);
+  const [status, setStatus] = useState("idle");
+  const [message, setMessage] = useState("");
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    const fields = {
+      name: String(formData.get("name") || "").trim(),
+      designation: String(formData.get("designation") || "").trim(),
+      company: String(formData.get("company") || "").trim(),
+      phone: String(formData.get("phone") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+      comments: String(formData.get("comments") || "").trim(),
+    };
+
+    if (
+      !fields.name ||
+      !fields.designation ||
+      !fields.company ||
+      !fields.phone ||
+      !fields.email
+    ) {
+      setStatus("error");
+      setMessage(
+        "Fill in the required details so we can assess your company properly."
+      );
+      return;
+    }
+
+    if (!emailPattern.test(fields.email)) {
+      setStatus("error");
+      setMessage("Add a valid email address and we will get back to you there.");
+      return;
+    }
+
+    setStatus("pending");
+    setMessage("");
+
+    try {
+      await emailjs.send(
+        SERVICE_ID,
+        TEMPLATE_ID,
+        {
+          Name: fields.name,
+          email: fields.email,
+          phone: fields.phone,
+          company_name: fields.company,
+          designation: fields.designation,
+          comments: fields.comments || "—",
+        },
+        { publicKey: PUBLIC_KEY }
+      );
+
+      setStatus("success");
+      setMessage(
+        "Assessment request received. We will reach out with the next steps shortly."
+      );
+      form.reset();
+    } catch (error) {
+      setStatus("error");
+      setMessage(
+        "Something went wrong while sending. Please try again or email us directly."
+      );
+    }
+  }
+
+  const pending = status === "pending";
 
   return (
-    <form action={formAction} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid gap-5 md:grid-cols-2">
-        <Field
-          label="Name"
-          name="name"
-          defaultValue={state.fields?.name}
-        />
-        <Field
-          label="Designation"
-          name="designation"
-          defaultValue={state.fields?.designation}
-        />
-        <Field
-          label="Company Name"
-          name="company"
-          defaultValue={state.fields?.company}
-        />
-        <Field
-          label="Phone Number"
-          name="phone"
-          type="tel"
-          defaultValue={state.fields?.phone}
-        />
+        <Field label="Name" name="name" />
+        <Field label="Designation" name="designation" />
+        <Field label="Company Name" name="company" />
+        <Field label="Phone Number" name="phone" type="tel" />
         <div className="md:col-span-2">
-          <Field
-            label="Email Address"
-            name="email"
-            type="email"
-            defaultValue={state.fields?.email}
-          />
+          <Field label="Email Address" name="email" type="email" />
         </div>
         <div className="md:col-span-2">
-          <Field
-            label="Comments"
-            name="comments"
-            rows={5}
-            required={false}
-            defaultValue={state.fields?.comments}
-          />
+          <Field label="Comments" name="comments" rows={5} required={false} />
         </div>
       </div>
 
@@ -109,17 +140,15 @@ export default function ContactForm() {
         <p
           aria-live="polite"
           className={`max-w-xl text-sm leading-7 ${
-            state.status === "success" ? "text-brand-green" : "text-foreground/70"
+            status === "success" ? "text-brand-green" : "text-foreground/70"
           }`}
         >
-          {state.message ||
-            "Tell us where the friction is. We will take a proper look and come back with clear next steps."}
+          {message || idleMessage}
         </p>
         <div className="w-full md:max-w-xs">
-          <SubmitButton />
+          <SubmitButton pending={pending} />
         </div>
       </div>
     </form>
   );
 }
-
