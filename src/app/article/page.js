@@ -24,14 +24,55 @@ const articleCards = [
 ];
 
 export const metadata = {
-  title: "The Cherry Effect | Article",
+  title: "Articles on Marketing, Buyer Psychology & Growth",
   description:
-    "Thought pieces from The Cherry Effect on positioning, buyer psychology, and growth systems.",
+    "Thought pieces from The Cherry Effect — a digital marketing agency in Delhi NCR — on positioning, buyer psychology, content strategy, performance marketing, and growth systems that last.",
+  keywords: [
+    "marketing articles",
+    "buyer psychology",
+    "brand positioning",
+    "content strategy",
+    "performance marketing",
+    "growth systems",
+    "digital marketing Delhi NCR",
+  ],
+  alternates: {
+    canonical: "/article",
+  },
+  openGraph: {
+    type: "website",
+    url: "https://thecherryeffect.com/article",
+    title: "Articles on Marketing, Buyer Psychology & Growth | The Cherry Effect",
+    description:
+      "Sharp thinking from The Cherry Effect on positioning, buyer psychology, and the systems behind growth that actually lasts.",
+  },
+};
+
+const blogSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "The Cherry Effect Journal",
+  description:
+    "Articles on marketing, buyer psychology, positioning, and growth from The Cherry Effect.",
+  url: "https://thecherryeffect.com/article",
+  isPartOf: { "@id": "https://thecherryeffect.com/#website" },
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: articleCards.map((article, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: article.title,
+    })),
+  },
 };
 
 export default function ArticlePage() {
   return (
     <main className="relative overflow-hidden bg-background text-foreground">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogSchema) }}
+      />
       <CustomCursor />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,0,149,0.18),transparent_38%),radial-gradient(circle_at_80%_20%,rgba(0,168,107,0.18),transparent_30%),linear-gradient(180deg,var(--surface-base)_0%,#090909_100%)]" />
       <div className="relative mx-auto flex min-h-screen max-w-6xl flex-col gap-14 px-6 py-10 sm:px-10 lg:px-12">
