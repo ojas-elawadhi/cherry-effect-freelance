@@ -194,51 +194,51 @@ export const proofItems = [
 export const testimonialItems = [
   {
     quote:
-      "TCE Marketing built our brand identity from scratch — logo, brand image, and a full marketing strategy that drove business growth and positioned us confidently on the road to IPO readiness.",
+      "The Cherry Effect Marketing built our brand identity from scratch; logo, brand image, and a full marketing strategy that drove business growth and positioned us confidently on the road to IPO readiness.",
     name: "GCM Chattisgarh",
-    title: "Industrial Logistics – Coal & Fly Ash, India",
+    title: "Industrial Logistics - Coal & Fly Ash, India",
   },
   {
     quote:
-      "TCE Marketing gave our spice brand a distinct identity and a clear market direction that helped us reach the right buyers and grow with purpose.",
+      "The Cherry Effect gave our spice brand a distinct identity and a clear market direction that helped us reach the right buyers and grow with purpose.",
     name: "Pitambra Daruveda",
-    title: "Spices – India",
+    title: "Spices - India",
   },
   {
     quote:
-      "TCE Marketing understood the complexity of our industry and delivered a focused B2B marketing strategy that brought us visibility, credibility, and measurable business growth.",
+      "Cherry Effect understood the complexity of our industry and delivered a focused B2B marketing strategy that brought us visibility, credibility, and measurable business growth.",
     name: "AOD Chemical",
-    title: "Chemical Manufacturer – Delhi, India",
+    title: "Chemical Manufacturer - Delhi, India",
   },
   {
     quote:
-      "TCE Marketing helped us define our brand voice and build a communication strategy that connected with students and institutions across borders with clarity and confidence.",
+      "The Cherry Effect helped us define our presence in India's market. Built a communication strategy that connected with students and institutions across borders with clarity and confidence.",
     name: "KTC Group",
-    title: "Education – Tokyo, Japan",
+    title: "Education - Tokyo, Japan",
   },
   {
     quote:
-      "TCE Marketing brought the strategic precision and creative refinement that a five-star property demands — elevating our brand presence exactly where it mattered most.",
+      "The Cherry Effect Marketing brought the strategic precision and creative refinement that a five-star property demands elevating our brand presence exactly where it mattered most.",
     name: "Taj 51 Buckingham Gate",
-    title: "Luxury Hotel – London, UK",
+    title: "Luxury Hotel - London, UK",
   },
   {
     quote:
-      "TCE Marketing sharpened our trade positioning and gave us the marketing direction needed to expand our dealer network and grow our presence in a highly competitive market.",
+      "Charvi sharpened our trade positioning and gave us the marketing direction needed to expand our dealer network and grow our presence in a highly competitive market.",
     name: "Servis",
     title: "Truck & Automotive Spare Parts – Delhi, India",
   },
   {
     quote:
-      "TCE Marketing transformed our fitness centre into a recognisable local brand — the strategy, the look, and the outreach all came together to deliver real membership growth.",
+      "The Cherry Effect Marketing transformed our fitness centre into a recognisable local brand the strategy, the look, and the outreach all came together to deliver real membership growth.",
     name: "T&T Gym",
     title: "Fitness – Chh. Sambhajinagar, India",
   },
   {
     quote:
-      "TCE Marketing brought sharp, structured thinking to our regional marketing efforts and helped us align strategy with business goals across the India market.",
+      "The Cherry Effect brought sharp, structured thinking to our regional marketing efforts and helped us align strategy with business goals across the India market.",
     name: "HCL Tech",
-    title: "Technology – Singapore",
+    title: "Technology - Singapore",
   },
   {
     quote:
@@ -248,13 +248,13 @@ export const testimonialItems = [
   },
   {
     quote:
-      "TCE Marketing captured everything that the Harley-Davidson spirit stands for and translated it into campaigns that genuinely resonated with the Indian riding community.",
+      "The Cherry Effect captured everything that the Harley-Davidson spirit stands for and translated it into campaigns that genuinely resonated with the Indian riding community.",
     name: "Harley-Davidson",
     title: "Motorcycles – Mumbai, India",
   },
   {
     quote:
-      "TCE Marketing gave our projects the premium positioning they deserved and helped us build lasting trust with the right homebuyers at every stage of the journey.",
+      "Cherry Effect Marketing gave our projects the premium positioning they deserved and helped us build lasting trust with the right homebuyers at every stage of the journey.",
     name: "Raheja Universal",
     title: "Real Estate Developer – Mumbai, India",
   },
