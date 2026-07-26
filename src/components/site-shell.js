@@ -1,5 +1,3 @@
-"use client";
-
 import CustomCursor from "./custom-cursor";
 import AboutSection from "./site-shell/about-section";
 import ArticlesSection from "./site-shell/articles-section";

@@ -5,7 +5,7 @@ import SectionReveal from "./section-reveal";
 
 export default function ArticlesSection() {
   return (
-    <section className="px-4 py-24 sm:px-6 lg:px-10">
+    <section className="render-later render-later--medium px-4 py-24 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-12">
         <SectionReveal className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="space-y-4">

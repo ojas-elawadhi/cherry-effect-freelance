@@ -13,6 +13,7 @@ export const InfiniteMovingCards = ({
   const containerRef = React.useRef(null);
   const scrollerRef = React.useRef(null);
   const [start, setStart] = useState(false);
+  const [inView, setInView] = useState(false);
 
   const getDirection = React.useCallback(() => {
     if (containerRef.current) {
@@ -64,6 +65,24 @@ export const InfiniteMovingCards = ({
   useEffect(() => {
     addAnimation();
   }, [addAnimation]);
+
+  useEffect(() => {
+    const container = containerRef.current;
+
+    if (!container) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setInView(entry.isIntersecting),
+      { rootMargin: "160px 0px" },
+    );
+
+    observer.observe(container);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div
       ref={containerRef}
@@ -75,7 +94,7 @@ export const InfiniteMovingCards = ({
         ref={scrollerRef}
         className={cn(
           "flex w-max min-w-full shrink-0 flex-nowrap gap-4 py-4",
-          start && "animate-scroll",
+          start && inView && "animate-scroll",
           pauseOnHover && "hover:[animation-play-state:paused]"
         )}>
         {items.map((item, idx) => (

@@ -5,7 +5,7 @@ import SectionReveal from "./section-reveal";
 
 export default function ProofSection() {
   return (
-    <section className="px-4 py-24 sm:px-6 lg:px-10">
+    <section className="render-later render-later--long px-4 py-24 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl space-y-14">
         <SectionReveal className="space-y-4 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.42em] text-brand-green">
@@ -73,4 +73,3 @@ export default function ProofSection() {
     </section>
   );
 }
-

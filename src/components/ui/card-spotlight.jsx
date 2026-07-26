@@ -1,9 +1,12 @@
 "use client";
 
-import { useMotionValue, motion, useMotionTemplate } from "motion/react";
-import React, { useState } from "react";
-import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
+import { useEffect, useRef } from "react";
+
 import { cn } from "@/lib/utils";
+
+function toRgb(color) {
+  return `rgb(${color.join(" ")})`;
+}
 
 export const CardSpotlight = ({
   children,
@@ -14,56 +17,69 @@ export const CardSpotlight = ({
     [139, 92, 246],
   ],
   dotSize = 3,
-  animationSpeed = 5,
   className,
+  style,
   ...props
 }) => {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  function handleMouseMove({
-    currentTarget,
-    clientX,
-    clientY
-  }) {
-    let { left, top } = currentTarget.getBoundingClientRect();
+  const cardRef = useRef(null);
+  const frameRef = useRef(null);
+  const pointerRef = useRef({ x: 0, y: 0 });
 
-    mouseX.set(clientX - left);
-    mouseY.set(clientY - top);
-  }
+  useEffect(
+    () => () => {
+      if (frameRef.current !== null) {
+        window.cancelAnimationFrame(frameRef.current);
+      }
+    },
+    [],
+  );
 
-  const [isHovering, setIsHovering] = useState(false);
-  const handleMouseEnter = () => setIsHovering(true);
-  const handleMouseLeave = () => setIsHovering(false);
+  const handlePointerMove = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    pointerRef.current = {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top,
+    };
+
+    if (frameRef.current !== null) {
+      return;
+    }
+
+    frameRef.current = window.requestAnimationFrame(() => {
+      frameRef.current = null;
+      const card = cardRef.current;
+
+      if (!card) {
+        return;
+      }
+
+      card.style.setProperty("--spotlight-x", `${pointerRef.current.x}px`);
+      card.style.setProperty("--spotlight-y", `${pointerRef.current.y}px`);
+    });
+  };
+
   return (
     <div
+      ref={cardRef}
       className={cn(
-        "group/spotlight p-10 rounded-md relative border border-neutral-800 bg-black dark:border-neutral-800",
-        className
+        "card-spotlight group/spotlight relative rounded-md border border-neutral-800 bg-black p-10 dark:border-neutral-800",
+        className,
       )}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      {...props}>
-      <motion.div
-        className="pointer-events-none absolute z-0 -inset-px rounded-md opacity-0 transition duration-300 group-hover/spotlight:opacity-100"
-        style={{
-          backgroundColor: color,
-          maskImage: useMotionTemplate`
-            radial-gradient(
-              ${radius}px circle at ${mouseX}px ${mouseY}px,
-              white,
-              transparent 80%
-            )
-          `,
-        }}>
-        {isHovering && (
-          <CanvasRevealEffect
-            animationSpeed={animationSpeed}
-            containerClassName="bg-transparent absolute inset-0 pointer-events-none"
-            colors={canvasColors}
-            dotSize={dotSize} />
-        )}
-      </motion.div>
+      onPointerMove={handlePointerMove}
+      style={{
+        ...style,
+        "--spotlight-color": color,
+        "--spotlight-dot-primary": toRgb(canvasColors[0]),
+        "--spotlight-dot-secondary": toRgb(
+          canvasColors[1] ?? canvasColors[0],
+        ),
+        "--spotlight-dot-size": `${dotSize}px`,
+        "--spotlight-dot-secondary-size": `${Math.max(dotSize * 0.7, 1)}px`,
+        "--spotlight-radius": `${radius}px`,
+      }}
+      {...props}
+    >
+      <div aria-hidden="true" className="card-spotlight__effect" />
       {children}
     </div>
   );

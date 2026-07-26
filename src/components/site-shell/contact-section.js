@@ -4,7 +4,7 @@ import SectionReveal from "./section-reveal";
 
 export default function ContactSection() {
   return (
-    <section id="contact" className="px-4 py-24 sm:px-6 lg:px-10">
+    <section id="contact" className="render-later render-later--medium px-4 py-24 sm:px-6 lg:px-10">
       <div className="mx-auto max-w-6xl">
         <SectionReveal className="glass-panel relative overflow-hidden p-8 sm:p-10 lg:p-12">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,0,149,0.2),transparent_32%),radial-gradient(circle_at_80%_20%,rgba(0,168,107,0.22),transparent_30%)]" />

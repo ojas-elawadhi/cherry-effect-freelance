@@ -6,7 +6,7 @@ export default function ProcessSection() {
   return (
     <section
       id="how-we-work"
-      className="process-section px-4 py-24 sm:px-6 lg:px-10"
+      className="process-section render-later render-later--long px-4 py-24 sm:px-6 lg:px-10"
     >
       <div className="mx-auto max-w-6xl space-y-16">
         <SectionReveal className="space-y-5">

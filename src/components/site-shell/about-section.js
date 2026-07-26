@@ -6,7 +6,7 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="flex min-h-screen flex-col justify-center px-4 py-24 sm:px-6 lg:px-10"
+      className="render-later render-later--medium flex min-h-screen flex-col justify-center px-4 py-24 sm:px-6 lg:px-10"
     >
       <div className="mx-auto w-full max-w-6xl">
         <TypedStatement
