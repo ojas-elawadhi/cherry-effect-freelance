@@ -1,3 +1,5 @@
+export { articleCards } from "@/content/articles";
+
 export const navItems = [
   { label: "About Us", href: "#about" },
   { label: "Services", href: "#services" },
@@ -257,23 +259,5 @@ export const testimonialItems = [
       "Cherry Effect Marketing gave our projects the premium positioning they deserved and helped us build lasting trust with the right homebuyers at every stage of the journey.",
     name: "Raheja Universal",
     title: "Real Estate Developer – Mumbai, India",
-  },
-];
-
-export const articleCards = [
-  {
-    title: "Why buyer psychology should lead your marketing",
-    description:
-      "A better brand starts with understanding emotion first and logic second.",
-  },
-  {
-    title: "Why active content can still be invisible",
-    description:
-      "Consistency means very little if the message never sticks in memory.",
-  },
-  {
-    title: "Why growth breaks when the foundation is weak",
-    description:
-      "Scale is not a traffic problem when the offer, message, and system are still misaligned.",
   },
 ];

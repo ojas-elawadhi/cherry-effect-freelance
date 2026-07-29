@@ -170,7 +170,10 @@ export default function ProcessExperience({ steps }) {
                 <h3>{step.title}</h3>
                 <p>{step.body}</p>
 
-                <div className="process-card__signals" aria-label="Process signals">
+                <div
+                  className="process-card__signals"
+                  aria-label="Process signals"
+                >
                   {stepSignals[index].map((signal) => (
                     <span key={signal}>{signal}</span>
                   ))}

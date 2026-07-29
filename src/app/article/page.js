@@ -1,50 +1,39 @@
 import Link from "next/link";
 
 import CustomCursor from "../../components/custom-cursor";
+import { articleCards } from "../../components/site-shell/data";
 
-const articleCards = [
-  {
-    title: "Why People Buy Before They Understand Why",
-    category: "Psychology",
-    excerpt:
-      "A sharp breakdown of emotional triggers, logical justification, and what most brands misunderstand about demand.",
-  },
-  {
-    title: "Content Is Not the Goal. Recall Is.",
-    category: "Strategy",
-    excerpt:
-      "How to build content systems that stay in people's heads instead of disappearing into the scroll.",
-  },
-  {
-    title: "The Difference Between Looking Good and Converting Well",
-    category: "Growth",
-    excerpt:
-      "Design polish matters, but meaning, positioning, and decision flow matter more.",
-  },
+const SITE_URL = "https://thecherryeffect.com";
+
+const cardGlows = [
+  "radial-gradient(circle at top left, rgba(255, 0, 149, 0.26), transparent 42%)",
+  "radial-gradient(circle at top, rgba(245, 230, 168, 0.22), transparent 44%)",
+  "radial-gradient(circle at top right, rgba(0, 168, 107, 0.24), transparent 42%)",
+  "radial-gradient(circle at bottom left, rgba(157, 78, 221, 0.24), transparent 44%)",
 ];
 
 export const metadata = {
-  title: "Articles on Marketing, Buyer Psychology & Growth",
+  title: "Business Strategy & Market Analysis Articles",
   description:
-    "Thought pieces from The Cherry Effect — a digital marketing agency in Delhi NCR — on positioning, buyer psychology, content strategy, performance marketing, and growth systems that last.",
+    "Read The Cherry Effect's articles on international business strategy, market entry, new ventures, hospitality, and growth.",
   keywords: [
-    "marketing articles",
-    "buyer psychology",
-    "brand positioning",
-    "content strategy",
-    "performance marketing",
-    "growth systems",
-    "digital marketing Delhi NCR",
+    "business strategy articles",
+    "international market entry",
+    "international business strategy",
+    "new venture analysis",
+    "UK electric vehicle market",
+    "India fitness market",
+    "IHCL case study",
   ],
   alternates: {
     canonical: "/article",
   },
   openGraph: {
     type: "website",
-    url: "https://thecherryeffect.com/article",
-    title: "Articles on Marketing, Buyer Psychology & Growth | The Cherry Effect",
+    url: `${SITE_URL}/article`,
+    title: "Business Strategy & Market Analysis Articles | The Cherry Effect",
     description:
-      "Sharp thinking from The Cherry Effect on positioning, buyer psychology, and the systems behind growth that actually lasts.",
+      "Sharp reads on international business strategy, market entry, new ventures, and strategic resilience.",
   },
 };
 
@@ -53,15 +42,16 @@ const blogSchema = {
   "@type": "CollectionPage",
   name: "The Cherry Effect Journal",
   description:
-    "Articles on marketing, buyer psychology, positioning, and growth from The Cherry Effect.",
-  url: "https://thecherryeffect.com/article",
-  isPartOf: { "@id": "https://thecherryeffect.com/#website" },
+    "Articles on international business strategy, market entry, new ventures, and growth from The Cherry Effect.",
+  url: `${SITE_URL}/article`,
+  isPartOf: { "@id": `${SITE_URL}/#website` },
   mainEntity: {
     "@type": "ItemList",
     itemListElement: articleCards.map((article, index) => ({
       "@type": "ListItem",
       position: index + 1,
       name: article.title,
+      url: `${SITE_URL}${article.href}`,
     })),
   },
 };
@@ -85,8 +75,8 @@ export default function ArticlePage() {
               Sharp thinking for brands that want better decisions.
             </h1>
             <p className="max-w-2xl text-base leading-7 text-foreground/72 sm:text-lg">
-              Articles around psychology, positioning, content clarity, and the
-              systems behind growth that actually lasts.
+              Deep reads on international expansion, market entry, new ventures,
+              and the strategic choices behind resilient growth.
             </p>
           </div>
           <Link
@@ -97,37 +87,44 @@ export default function ArticlePage() {
           </Link>
         </header>
 
-        <section className="grid gap-6 md:grid-cols-3">
+        <section className="grid gap-6 md:grid-cols-2">
           {articleCards.map((article, index) => (
             <article
               key={article.title}
-              className="group relative overflow-hidden rounded-[2rem] border border-white/10 bg-surface-elevated/80 p-7 transition duration-500 hover:-translate-y-2 hover:border-primary/50"
+              className="group relative min-h-[25rem] overflow-hidden rounded-[2rem] border border-white/10 bg-surface-elevated/80 transition duration-500 hover:-translate-y-2 hover:border-primary/50"
             >
               <div
                 className="pointer-events-none absolute inset-0 opacity-70"
-                style={{
-                  background:
-                    index === 0
-                      ? "radial-gradient(circle at top left, rgba(255, 0, 149, 0.26), transparent 40%)"
-                      : index === 1
-                        ? "radial-gradient(circle at top, rgba(245, 230, 168, 0.22), transparent 44%)"
-                        : "radial-gradient(circle at top right, rgba(0, 168, 107, 0.24), transparent 40%)",
-                }}
+                style={{ background: cardGlows[index] }}
               />
-              <div className="relative space-y-5">
-                <span className="inline-flex rounded-full border border-white/10 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-foreground/72">
-                  {article.category}
-                </span>
-                <h2 className="text-2xl font-black uppercase leading-tight tracking-[-0.04em] text-foreground">
+              <Link
+                href={article.href}
+                aria-label={`Read ${article.title}`}
+                className="relative flex h-full min-h-[25rem] flex-col p-7"
+              >
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <span className="inline-flex rounded-full border border-white/10 px-3 py-1 text-[0.65rem] font-semibold uppercase tracking-[0.3em] text-foreground/72">
+                    {article.category}
+                  </span>
+                  <span className="text-[0.65rem] font-semibold uppercase tracking-[0.24em] text-foreground/48">
+                    {article.year}
+                  </span>
+                </div>
+                <h2 className="mt-7 text-2xl font-black uppercase leading-tight tracking-[-0.04em] text-foreground sm:text-3xl">
                   {article.title}
                 </h2>
-                <p className="text-sm leading-7 text-foreground/72">
-                  {article.excerpt}
+                <p className="mt-5 text-sm leading-7 text-foreground/72 sm:text-base">
+                  {article.description}
                 </p>
-                <p className="text-xs uppercase tracking-[0.35em] text-brand-green">
-                  Full article page can plug into CMS next.
-                </p>
-              </div>
+                <div className="mt-auto flex items-end justify-between gap-4 pt-8">
+                  <p className="text-xs font-semibold uppercase tracking-[0.24em] text-foreground/48">
+                    {article.readTime}
+                  </p>
+                  <span className="text-sm font-semibold uppercase tracking-[0.2em] text-brand-green transition group-hover:text-primary">
+                    Read article <span aria-hidden="true">&#8594;</span>
+                  </span>
+                </div>
+              </Link>
             </article>
           ))}
         </section>

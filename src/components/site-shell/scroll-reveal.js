@@ -105,7 +105,7 @@ export default function ScrollReveal({
   return (
     <div
       ref={containerRef}
-      className={["relative h-[320vh]", containerClassName]
+      className={["relative h-[270vh]", containerClassName]
         .filter(Boolean)
         .join(" ")}
     >
