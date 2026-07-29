@@ -1104,6 +1104,41 @@ body {
 }
 
 .process-card {
+  --process-card-spring: linear(
+    0,
+    0.0444,
+    0.1423,
+    0.2586,
+    0.3749,
+    0.4818,
+    0.5757,
+    0.6556,
+    0.7224,
+    0.7773,
+    0.8221,
+    0.8583,
+    0.8874,
+    0.9106,
+    0.9292,
+    0.944,
+    0.9557,
+    0.965,
+    0.9724,
+    0.9782,
+    0.9828,
+    0.9864,
+    0.9893,
+    0.9916,
+    0.9933,
+    0.9947,
+    0.9959,
+    0.9967,
+    0.9974,
+    0.998,
+    0.9984,
+    1,
+    1
+  );
   position: relative;
   display: grid;
   grid-template-columns: 8.5rem 1fr;
@@ -1120,17 +1155,26 @@ body {
   transform-style: preserve-3d;
   backface-visibility: hidden;
   opacity: 0;
-  transform: translate3d(0, 64px, 0) scale(0.96);
+  filter: blur(14px);
+  transform: translate3d(0, 92px, 0) rotateX(10deg) scale(0.94);
   transition:
-    opacity 520ms ease,
-    transform 620ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 280ms ease-out,
+    filter 280ms ease-out,
+    transform 280ms ease-out,
     border-color 280ms ease,
     box-shadow 280ms ease;
 }
 
 .process-card.is-revealed {
   opacity: 1;
-  transform: translate3d(0, 0, 0) scale(1);
+  filter: blur(0);
+  transform: translate3d(0, 0, 0) rotateX(0deg) scale(1);
+  transition:
+    opacity 1000ms var(--process-card-spring),
+    filter 1000ms var(--process-card-spring),
+    transform 1000ms var(--process-card-spring),
+    border-color 280ms ease,
+    box-shadow 280ms ease;
 }
 
 .process-card::before {
@@ -1684,7 +1728,9 @@ body {
   .process-card,
   .reveal {
     opacity: 1;
+    filter: none;
     transform: none;
+    transition: none;
   }
 }
 

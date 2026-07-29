@@ -21,11 +21,78 @@ const stepSignals = [
 ];
 
 export default function ProcessExperience({ steps }) {
+  const wrapperRef = useRef(null);
   const cardRefs = useRef([]);
+  const activeIndexRef = useRef(0);
   const [activeIndex, setActiveIndex] = useState(0);
   const [revealedCards, setRevealedCards] = useState(() =>
     steps.map(() => false),
   );
+
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+
+    if (!wrapper || !steps.length) {
+      return undefined;
+    }
+
+    let frameId = null;
+    let startOffset = 0;
+    let endOffset = 1;
+
+    const measure = () => {
+      const bounds = wrapper.getBoundingClientRect();
+      const wrapperTop = window.scrollY + bounds.top;
+
+      startOffset = wrapperTop - window.innerHeight * 0.72;
+      endOffset = wrapperTop + bounds.height - window.innerHeight * 0.36;
+    };
+
+    const updateActiveIndex = () => {
+      frameId = null;
+
+      const distance = Math.max(1, endOffset - startOffset);
+      const progress = Math.min(
+        1,
+        Math.max(0, (window.scrollY - startOffset) / distance),
+      );
+      const nextIndex = Math.min(
+        steps.length - 1,
+        Math.max(0, Math.floor(progress * steps.length)),
+      );
+
+      if (activeIndexRef.current !== nextIndex) {
+        activeIndexRef.current = nextIndex;
+        setActiveIndex(nextIndex);
+      }
+    };
+
+    const scheduleUpdate = () => {
+      if (frameId === null) {
+        frameId = window.requestAnimationFrame(updateActiveIndex);
+      }
+    };
+
+    const handleResize = () => {
+      measure();
+      scheduleUpdate();
+    };
+
+    measure();
+    updateActiveIndex();
+
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", handleResize);
+
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+    };
+  }, [steps.length]);
 
   useEffect(() => {
     const cards = cardRefs.current.filter(Boolean);
@@ -36,14 +103,6 @@ export default function ProcessExperience({ steps }) {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        const mostVisible = entries
-          .filter((entry) => entry.isIntersecting)
-          .map((entry) => ({
-            index: Number(entry.target.dataset.processIndex),
-            ratio: entry.intersectionRatio,
-          }))
-          .sort((a, b) => b.ratio - a.ratio)[0];
-
         setRevealedCards((current) => {
           const next = [...current];
           let changed = false;
@@ -68,10 +127,6 @@ export default function ProcessExperience({ steps }) {
 
           return changed ? next : current;
         });
-
-        if (mostVisible && !Number.isNaN(mostVisible.index)) {
-          setActiveIndex(mostVisible.index);
-        }
       },
       {
         rootMargin: "0px 0px -10% 0px",
@@ -85,7 +140,7 @@ export default function ProcessExperience({ steps }) {
   }, [steps]);
 
   return (
-    <div className="process-experience">
+    <div ref={wrapperRef} className="process-experience">
       <div className="process-cards">
         {steps.map((step, index) => {
           const Icon = stepIcons[index] ?? ArrowRight;
