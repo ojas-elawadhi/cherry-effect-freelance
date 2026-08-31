@@ -15,11 +15,28 @@ const TRACKS = [
 
 export default function MusicPlayer() {
   const audioRef = useRef(null);
-  const [trackIndex, setTrackIndex] = useState(0);
+  const [trackIndex, setTrackIndex] = useState(null);
   const [isMuted, setIsMuted] = useState(false);
 
   const startPlayback = useCallback(() => {
     return audioRef.current?.play().catch(() => undefined);
+  }, []);
+
+  useEffect(() => {
+    const previousStart = Number.parseInt(
+      window.sessionStorage.getItem("music-start-track") ?? "-1",
+      10,
+    );
+    const availableTracks = TRACKS.map((_, index) => index).filter(
+      (index) => index !== previousStart,
+    );
+    const randomStart =
+      availableTracks[Math.floor(Math.random() * availableTracks.length)];
+
+    window.sessionStorage.setItem("music-start-track", String(randomStart));
+    const initializeTrack = window.setTimeout(() => setTrackIndex(randomStart), 0);
+
+    return () => window.clearTimeout(initializeTrack);
   }, []);
 
   useEffect(() => {
@@ -68,7 +85,7 @@ export default function MusicPlayer() {
     <>
       <audio
         ref={audioRef}
-        src={TRACKS[trackIndex]}
+        src={trackIndex === null ? undefined : TRACKS[trackIndex]}
         autoPlay
         preload="auto"
         muted={isMuted}
