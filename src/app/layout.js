@@ -1,4 +1,5 @@
 import { Press_Start_2P, Space_Grotesk } from "next/font/google";
+import MusicPlayer from "@/components/music-player";
 import "./globals.css";
 
 const bodyFont = Space_Grotesk({
@@ -171,6 +172,7 @@ export default function RootLayout({ children }) {
           }}
         />
         {children}
+        <MusicPlayer />
       </body>
     </html>
   );
