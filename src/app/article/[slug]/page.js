@@ -189,9 +189,11 @@ export default async function ArticleDetailPage({ params }) {
     wordCount: article.wordCount,
     inLanguage: "en",
     author: {
-      "@type": "Organization",
-      "@id": `${SITE_URL}/#organization`,
-      name: "The Cherry Effect",
+      "@type": article.author === "The Cherry Effect" ? "Organization" : "Person",
+      ...(article.author === "The Cherry Effect"
+        ? { "@id": `${SITE_URL}/#organization` }
+        : {}),
+      name: article.author,
     },
     publisher: {
       "@type": "Organization",
@@ -241,8 +243,12 @@ export default async function ArticleDetailPage({ params }) {
 
         <dl className={styles.metadataBar}>
           <div className={styles.metadataItem}>
-            <dt className={styles.metadataLabel}>Source note</dt>
-            <dd className={styles.metadataValue}>{article.sourceNote}</dd>
+            <dt className={styles.metadataLabel}>Author</dt>
+            <dd className={styles.metadataValue}>{article.author}</dd>
+          </div>
+          <div className={styles.metadataItem}>
+            <dt className={styles.metadataLabel}>Year</dt>
+            <dd className={styles.metadataValue}>{article.year}</dd>
           </div>
           <div className={styles.metadataItem}>
             <dt className={styles.metadataLabel}>Reading time</dt>

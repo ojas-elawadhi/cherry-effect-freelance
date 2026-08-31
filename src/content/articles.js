@@ -6,8 +6,9 @@ const articleDetails = {
     category: "Market Entry",
     description:
       "A strategic read of the opportunity, regulation, buyer behaviour, and risks shaping the UK EV market for international manufacturers.",
-    year: "c. 2020",
+    year: "2020",
     publishedYear: "2020",
+    author: "Charvi Madan",
     readTime: "10 min read",
   },
   "how-firms-compete-across-borders": {
@@ -15,8 +16,9 @@ const articleDetails = {
     category: "International Strategy",
     description:
       "A practical guide to the institution-based view, OLI framework, and integration-responsiveness choices behind international growth.",
-    year: "c. 2021",
+    year: "2021",
     publishedYear: "2021",
+    author: "The Cherry Effect",
     readTime: "12 min read",
   },
   "building-home-fitness-studio-india": {
@@ -24,8 +26,9 @@ const articleDetails = {
     category: "New Ventures",
     description:
       "A feasibility study covering demand, competition, business-model design, and the launch case for an at-home fitness service in India.",
-    year: "c. 2021",
+    year: "2021",
     publishedYear: "2021",
+    author: "Tapan Kumar Awasthy",
     readTime: "14 min read",
   },
   "weathering-the-storm-of-covid-19": {
@@ -33,8 +36,9 @@ const articleDetails = {
     category: "Strategic Case Study",
     description:
       "A case study of how IHCL and Taj Hotels responded to the pandemic through operational resilience, brand trust, and strategic adaptation.",
-    year: "c. 2020",
+    year: "2020",
     publishedYear: "2020",
+    author: "The Cherry Effect",
     readTime: "11 min read",
   },
 };
@@ -130,6 +134,7 @@ const referenceStarts = {
 
 function normaliseText(text) {
   return text
+    .replaceAll("—", "-")
     .replaceAll("£350– 400", "£350–400")
     .replaceAll("car- rental", "car-rental")
     .replaceAll("integration– responsiveness", "integration–responsiveness");
@@ -400,7 +405,6 @@ export const articles = sourceArticles.map((sourceArticle) => {
     ...sourceArticle,
     ...metadata,
     href: `/article/${sourceArticle.slug}`,
-    sourceNote: sourceArticle.standfirst,
     standfirst: metadata.description,
     blocks,
     wordCount,

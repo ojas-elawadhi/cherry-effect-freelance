@@ -34,16 +34,19 @@ export const problemCards = [
     title: "Your brand looks fine.",
     body: "It just doesn't mean anything.",
     tone: "purple",
+    image: "/what%20we%20fix%201.jpeg",
   },
   {
     title: "Your content is active.",
     body: "But it's not doing anything.",
     tone: "yellow",
+    image: "/what%20we%20fix%202.jpeg",
   },
   {
     title: "Your business runs.",
     body: "But it's not set up to scale.",
     tone: "green",
+    image: "/what%20we%20fix%203.jpeg",
   },
 ];
 

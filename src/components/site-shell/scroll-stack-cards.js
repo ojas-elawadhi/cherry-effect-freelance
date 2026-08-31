@@ -7,9 +7,9 @@ import ScrollStack, { ScrollStackItem } from "@/components/ScrollStack";
 import { problemCards } from "./data";
 
 const toneClasses = {
-  purple: "fix-card--purple bg-[#2d1148] text-[#f8edff]",
-  yellow: "fix-card--yellow bg-brand-yellow text-[#2e2608]",
-  green: "fix-card--green bg-brand-green text-[#041f16]",
+  purple: "fix-card--purple bg-[#2d1148] text-white",
+  yellow: "fix-card--yellow bg-[#28200c] text-white",
+  green: "fix-card--green bg-[#082a20] text-white",
 };
 
 export default function ScrollStackCards({ behind = null }) {
@@ -68,6 +68,11 @@ export default function ScrollStackCards({ behind = null }) {
               toneClasses[card.tone]
             }`}
           >
+            <span
+              aria-hidden="true"
+              className="fix-card__image"
+              style={{ backgroundImage: `url(${card.image})` }}
+            />
             <span aria-hidden="true" className="fix-card__wash" />
             <span aria-hidden="true" className="fix-card__shine" />
             <span aria-hidden="true" className="fix-card__edge" />
